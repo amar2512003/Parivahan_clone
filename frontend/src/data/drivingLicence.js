@@ -1,0 +1,61 @@
+export const DRIVING_LICENCE_SERVICES = [
+  { slug: "learners-license", title: "Apply for Learner Licence", icon: "LL", tone: "sky" },
+  { slug: "new-driving-license", title: "Apply for Driving Licence", icon: "DL", tone: "blue" },
+  { slug: "dl-renewal", title: "Renew Driving Licence", icon: "RN", tone: "orange" },
+  { slug: "duplicate-license", title: "Get Duplicate DL", icon: "CP", tone: "pink" },
+  { slug: "change-address", title: "Change Address", icon: "AD", tone: "cyan" },
+  { slug: "international-permit", title: "International Driving Permit", icon: "ID", tone: "red" },
+  { slug: "dl-extract", title: "Download DL Extract", icon: "EX", tone: "indigo" },
+  { slug: "fee-payment", title: "Fee Payments", icon: "₹", tone: "violet" },
+  { slug: "print-application", title: "Print Application Form", icon: "PR", tone: "purple" },
+  { slug: "mobile-update", title: "Update Mobile Number", icon: "MB", tone: "teal" },
+  { slug: "withdraw-application", title: "Withdraw Application", icon: "WD", tone: "lime" },
+  { slug: "dl-replacement", title: "Replace DL / Other Document", icon: "RP", tone: "plum" },
+  { slug: "addition-of-class", title: "Add Vehicle Class", icon: "VC", tone: "amber" },
+  { slug: "appointment", title: "Book an Appointment", icon: "AP", tone: "magenta" },
+  { slug: "learner-test-tutorial", title: "Learner Test Tutorial", icon: "TT", tone: "blue" },
+  { slug: "pending-application", title: "Complete Pending Application", icon: "PA", tone: "coral" },
+  { slug: "payment-status", title: "Check Payment Status", icon: "PS", tone: "green" },
+  { slug: "upload-document", title: "Upload Document", icon: "UP", tone: "azure" },
+  { slug: "online-lltest", title: "Online Learner Test", icon: "OT", tone: "navy" },
+  { slug: "find-doctor", title: "Find a Doctor", icon: "MD", tone: "aqua" },
+  { slug: "dl-status", title: "Know Your Licence Details", icon: "DL", tone: "slate" },
+];
+
+export const SERVICE_BY_SLUG = Object.fromEntries(
+  DRIVING_LICENCE_SERVICES.map((service) => [service.slug, service])
+);
+
+// The service selector intentionally covers 29 regions for this demo. Jammu & Kashmir
+// is retained alongside the current states to mirror the common legacy Sarathi selection.
+export const SERVICE_REGIONS = [
+  ["AP", "Andhra Pradesh"],
+  ["AR", "Arunachal Pradesh"],
+  ["AS", "Assam"],
+  ["BR", "Bihar"],
+  ["CG", "Chhattisgarh"],
+  ["GA", "Goa"],
+  ["GJ", "Gujarat"],
+  ["HR", "Haryana"],
+  ["HP", "Himachal Pradesh"],
+  ["JH", "Jharkhand"],
+  ["KA", "Karnataka"],
+  ["KL", "Kerala"],
+  ["MP", "Madhya Pradesh"],
+  ["MH", "Maharashtra"],
+  ["MN", "Manipur"],
+  ["ML", "Meghalaya"],
+  ["MZ", "Mizoram"],
+  ["NL", "Nagaland"],
+  ["OD", "Odisha"],
+  ["PB", "Punjab"],
+  ["RJ", "Rajasthan"],
+  ["SK", "Sikkim"],
+  ["TN", "Tamil Nadu"],
+  ["TS", "Telangana"],
+  ["TR", "Tripura"],
+  ["UK", "Uttarakhand"],
+  ["UP", "Uttar Pradesh"],
+  ["WB", "West Bengal"],
+  ["JK", "Jammu & Kashmir"],
+].map(([code, name]) => ({ code, name }));

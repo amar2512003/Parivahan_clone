@@ -1,0 +1,73 @@
+{
+  "brand": {
+    "title": "Parivahan Sewa",
+    "subtitle": "Ministry of Road Transport & Highways",
+    "govOfIndia": "Government of India"
+  },
+  "nav": {
+    "home": "Home",
+    "drivingLicense": "Driving Licence",
+    "registration": "Vehicle Registration",
+    "onlineServices": "Online Services",
+    "vehicleServices": "Vehicle Services",
+    "other": "Other Services",
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "All your vehicle documents, reimagined",
+    "subtitle": "A simpler, faster, mobile-friendly way to access driving licence and vehicle registration services.",
+    "cta": "Explore Services"
+  },
+  "home": {
+    "quickServices": "Quick Services",
+    "dlCardTitle": "Driving Licence Services",
+    "dlCardDesc": "Apply, renew, or check the status of your driving licence.",
+    "rcCardTitle": "Vehicle Registration",
+    "rcCardDesc": "Register a new vehicle or manage your existing RC.",
+    "lookupTitle": "Know Your Details",
+    "lookupDesc": "Look up licence or vehicle records instantly.",
+    "onlineCardTitle": "Vehicle Related Services",
+    "onlineCardDesc": "Access challan, permit, fitness, tax and other vehicle services.",
+    "notice": "Hackathon demo — uses dummy data only. Not affiliated with or a substitute for the official Parivahan portal."
+  },
+  "login": {
+    "title": "Login to Parivahan Sewa",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "demoHint": "Demo credentials: demo / demo1234",
+    "demoAccount": "Demo account",
+    "useDemo": "Use demo credentials",
+    "backendUnavailable": "Unable to reach the demo service. Start the backend, then try again.",
+    "error": "Invalid username or password.",
+    "back": "Back to Home"
+  },
+  "dl": {
+    "title": "Driving Licence Related Services",
+    "chooseService": "Select a service below",
+    "myLicense": "My Driving Licence",
+    "notLoggedIn": "Please log in to view your driving licence.",
+    "apply": "Submit Application",
+    "applySuccess": "Application submitted successfully.",
+    "lookupTitle": "Know Your Licence Details",
+    "lookupPlaceholder": "Enter Driving Licence Number",
+    "lookupBtn": "Search",
+    "holderName": "Holder Name",
+    "dlNumber": "DL Number",
+    "validTill": "Valid Till",
+    "vehicleClasses": "Vehicle Classes",
+    "status": "Status"
+  },
+  "footer": {
+    "rights": "This is an independent hackathon redesign concept. Not affiliated with the Government of India.",
+    "links": "Quick Links",
+    "contact": "Contact"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong. Please try again.",
+    "goBack": "Go Back"
+  }
+}

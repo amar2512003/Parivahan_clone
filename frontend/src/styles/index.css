@@ -1,0 +1,256 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply font-body text-navy-950 bg-slate-50 antialiased;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display;
+}
+
+:lang(hi) {
+  font-family: "Noto Sans Devanagari", "Inter", sans-serif;
+}
+
+.focus-ring:focus-visible {
+  @apply outline outline-2 outline-offset-2 outline-saffron;
+}
+
+@layer components {
+  .dl-page {
+    @apply min-h-[calc(100vh-12rem)] bg-slate-50;
+  }
+
+  .dl-hero {
+    background: radial-gradient(circle at 80% 20%, rgba(51, 139, 255, 0.35), transparent 26rem), linear-gradient(120deg, #0b1f3a, #164a86);
+    @apply text-white;
+  }
+
+  .dl-hero-compact {
+    background: radial-gradient(circle at 78% 25%, rgba(51, 139, 255, 0.28), transparent 22rem), linear-gradient(120deg, #0b1f3a, #123a6b);
+  }
+
+  .surface-card {
+    @apply bg-white border border-slate-200 rounded-2xl shadow-[0_12px_35px_rgba(15,23,42,0.08)];
+  }
+
+  .state-panel {
+    @apply p-5 sm:p-8;
+  }
+
+  .eyebrow {
+    @apply uppercase tracking-[0.14em] text-[0.68rem] font-bold text-slate-500;
+  }
+
+  .eyebrow-light {
+    @apply text-blue-200;
+  }
+
+  .state-search {
+    @apply flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-500 w-full sm:w-60;
+  }
+
+  .state-search input {
+    @apply w-full text-sm text-navy-950 outline-none placeholder:text-slate-400;
+  }
+
+  .state-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2;
+  }
+
+  .state-option {
+    @apply flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-3 text-left text-sm font-medium text-navy-950 transition duration-150 hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm;
+  }
+
+  .state-code {
+    @apply inline-flex shrink-0 h-8 min-w-8 items-center justify-center rounded-md bg-blue-100 px-1.5 text-[0.68rem] font-bold tracking-wide text-navy-800;
+  }
+
+  .state-arrow {
+    @apply ml-auto text-lg text-slate-400;
+  }
+
+  .state-chip {
+    @apply inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white backdrop-blur-sm;
+  }
+
+  .state-chip .state-code {
+    @apply bg-white/20 text-white;
+  }
+
+  .state-chip-button {
+    @apply text-left transition hover:bg-white/20;
+  }
+
+  .service-grid {
+    @apply grid grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+
+  .service-card {
+    @apply flex min-h-48 flex-col items-start rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_16px_30px_rgba(30,64,175,0.12)];
+  }
+
+  .service-icon {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-xl text-xs font-bold tracking-tight shadow-sm;
+  }
+
+  .service-icon-large {
+    @apply h-14 w-14 text-sm;
+  }
+
+  .service-title {
+    @apply mt-5 text-base font-semibold leading-snug text-navy-950;
+  }
+
+  .service-link {
+    @apply mt-auto pt-5 text-sm font-medium text-navy-700;
+  }
+
+  .back-link {
+    @apply inline-flex rounded text-sm font-medium text-navy-700 transition hover:text-navy-950;
+  }
+
+  .button-primary {
+    @apply items-center justify-center rounded-lg bg-navy-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-800 disabled:cursor-not-allowed;
+  }
+
+  .form-input {
+    @apply rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-navy-950 outline-none transition placeholder:text-slate-400 focus:border-navy-700 focus:ring-2 focus:ring-blue-100;
+  }
+
+  .detail-list {
+    @apply overflow-hidden rounded-xl border border-slate-200;
+  }
+
+  .detail-list > div {
+    @apply grid grid-cols-1 gap-1 border-b border-slate-100 px-4 py-3 text-sm last:border-0 sm:grid-cols-2 sm:gap-4;
+  }
+
+  .detail-list dt {
+    @apply text-slate-500;
+  }
+
+  .detail-list dd {
+    @apply font-semibold text-navy-950;
+  }
+
+  .login-prompt,
+  .success-state {
+    @apply flex gap-4 items-start;
+  }
+
+  .login-prompt-icon,
+  .success-mark {
+    @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl font-bold;
+  }
+
+  .login-prompt-icon {
+    @apply bg-blue-100 text-navy-800;
+  }
+
+  .success-mark {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .online-page {
+    @apply min-h-[calc(100vh-12rem)] bg-slate-50;
+  }
+
+  .online-hero {
+    background: radial-gradient(circle at 85% 22%, rgba(56, 189, 248, 0.35), transparent 22rem), linear-gradient(120deg, #0b1f3a, #155e9d);
+    @apply text-white;
+  }
+
+  .online-hero-chip {
+    @apply rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-blue-50 backdrop-blur-sm;
+  }
+
+  .online-service-grid {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .online-service-card {
+    @apply flex min-h-72 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_16px_30px_rgba(30,64,175,0.12)];
+  }
+
+  .online-service-mark {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-xl text-xs font-bold shadow-sm;
+  }
+
+  .online-service-mark-large {
+    @apply h-14 w-14 text-sm;
+  }
+
+  .online-list-dot {
+    @apply inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700;
+  }
+
+  .national-summary {
+    background: radial-gradient(circle at 86% 25%, rgba(56, 189, 248, 0.4), transparent 16rem), linear-gradient(120deg, #0b1f3a, #0f5e9b);
+    @apply flex flex-col gap-5 rounded-2xl px-6 py-7 text-white shadow-[0_12px_35px_rgba(15,23,42,0.16)] sm:flex-row sm:items-end sm:justify-between sm:px-8;
+  }
+
+  .national-summary-note {
+    @apply w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-blue-50;
+  }
+
+  .national-table {
+    @apply w-full min-w-[620px] text-left text-sm;
+  }
+
+  .national-table th {
+    @apply whitespace-nowrap bg-slate-50 px-5 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 sm:px-7;
+  }
+
+  .national-table td {
+    @apply border-t border-slate-100 px-5 py-4 text-slate-600 sm:px-7;
+  }
+
+  .national-table td:first-child {
+    @apply font-semibold text-navy-950;
+  }
+
+  .national-table td:nth-child(2),
+  .national-table td:nth-child(3) {
+    @apply whitespace-nowrap font-medium text-navy-950;
+  }
+
+  .online-action-icon {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-lg font-bold text-navy-800;
+  }
+}
+
+.tone-sky { background: #e0f2fe; color: #0369a1; }
+.tone-blue { background: #dbeafe; color: #1d4ed8; }
+.tone-orange { background: #ffedd5; color: #c2410c; }
+.tone-pink { background: #fce7f3; color: #be185d; }
+.tone-cyan { background: #cffafe; color: #0e7490; }
+.tone-red { background: #fee2e2; color: #b91c1c; }
+.tone-indigo { background: #e0e7ff; color: #4338ca; }
+.tone-violet { background: #ede9fe; color: #6d28d9; }
+.tone-purple { background: #f3e8ff; color: #7e22ce; }
+.tone-teal { background: #ccfbf1; color: #0f766e; }
+.tone-lime { background: #ecfccb; color: #4d7c0f; }
+.tone-plum { background: #f5dff4; color: #86198f; }
+.tone-amber { background: #fef3c7; color: #b45309; }
+.tone-magenta { background: #fae8ff; color: #a21caf; }
+.tone-coral { background: #ffe4e6; color: #be123c; }
+.tone-green { background: #dcfce7; color: #15803d; }
+.tone-azure { background: #dbeafe; color: #0369a1; }
+.tone-navy { background: #dbeafe; color: #0e2a52; }
+.tone-aqua { background: #cffafe; color: #0f766e; }
+.tone-slate { background: #e2e8f0; color: #334155; }
+.online-service-mark-blue { background: #dbeafe; color: #1d4ed8; }
+.online-service-mark-emerald { background: #d1fae5; color: #047857; }
+.online-service-mark-violet { background: #ede9fe; color: #6d28d9; }
+.online-service-mark-teal { background: #ccfbf1; color: #0f766e; }
+.online-service-mark-amber { background: #fef3c7; color: #b45309; }
+.online-service-mark-navy { background: #dbeafe; color: #0e2a52; }
+.online-service-mark-rose { background: #ffe4e6; color: #be123c; }
+.online-service-mark-sky { background: #e0f2fe; color: #0369a1; }
