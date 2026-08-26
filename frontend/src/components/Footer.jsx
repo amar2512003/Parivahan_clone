@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
         <div>
           <h4 className="text-white font-semibold mb-2">{t("footer.contact")}</h4>
-          <p className="text-sm text-slate-400">helpdesk@example.local</p>
+          <p className="text-sm text-slate-400">sinhaamar178@gmail.com</p>
         </div>
       </div>
       <div className="border-t border-navy-800 py-4 text-center text-xs text-slate-500 px-4">
