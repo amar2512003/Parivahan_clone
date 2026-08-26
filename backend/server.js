@@ -8,28 +8,17 @@ import servicesRoutes from "./routes/services.js";
 import dlRoutes from "./routes/dl.js";
 import vehicleRoutes from "./routes/vehicles.js";
 import applicationRoutes from "./routes/applications.js";
-import { seedDatabase } from "./db/seed.js";
-
-// Seed the demo database.
-// This keeps the sample data available for the hackathon demo.
-//seedDatabase({ log: false });
 
 const app = express();
-// const PORT = process.env.PORT || 5001;
 
-// Allow both local development and the deployed frontend.
-const allowedOrigins = (
-  process.env.CORS_ORIGIN ||
-  "http://localhost:5173"
-)
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://parivahan-clone.vercel.app",
+];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (Postman, server-to-server, etc.)
       if (!origin) {
         return callback(null, true);
       }
@@ -38,8 +27,16 @@ app.use(
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      console.log("❌ CORS blocked origin:", origin);
+      return callback(null, false);
     },
+
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+    ],
   })
 );
 
