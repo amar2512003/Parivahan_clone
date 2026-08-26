@@ -359,52 +359,113 @@ const COPY = {
 
 /* =========================================================
    SERVICE TRANSLATIONS
+   (keys must match the real slugs in ../data/drivingLicence.js)
 ========================================================= */
 
 const SERVICE_TRANSLATIONS = {
-  "dl-new": {
-    en: { title: "Apply for a New Driving Licence" },
-    hi: { title: "नए ड्राइविंग लाइसेंस के लिए आवेदन करें" },
+  "learners-license": {
+    en: { title: "Apply for Learner Licence" },
+    hi: { title: "लर्नर लाइसेंस के लिए आवेदन करें" },
+  },
+
+  "new-driving-license": {
+    en: { title: "Apply for Driving Licence" },
+    hi: { title: "ड्राइविंग लाइसेंस के लिए आवेदन करें" },
   },
 
   "dl-renewal": {
-    en: { title: "Driving Licence Renewal" },
+    en: { title: "Renew Driving Licence" },
     hi: { title: "ड्राइविंग लाइसेंस नवीनीकरण" },
   },
 
-  "dl-duplicate": {
-    en: { title: "Duplicate Driving Licence" },
-    hi: { title: "डुप्लिकेट ड्राइविंग लाइसेंस" },
+  "duplicate-license": {
+    en: { title: "Get Duplicate DL" },
+    hi: { title: "डुप्लिकेट ड्राइविंग लाइसेंस प्राप्त करें" },
   },
 
-  "dl-address-change": {
-    en: { title: "Change Address on Driving Licence" },
-    hi: { title: "ड्राइविंग लाइसेंस पर पता बदलें" },
+  "change-address": {
+    en: { title: "Change Address" },
+    hi: { title: "पता बदलें" },
   },
 
-  "dl-status": {
-    en: { title: "Check Driving Licence Status" },
-    hi: { title: "ड्राइविंग लाइसेंस की स्थिति जांचें" },
+  "international-permit": {
+    en: { title: "International Driving Permit" },
+    hi: { title: "अंतरराष्ट्रीय ड्राइविंग परमिट" },
   },
 
-  "dl-appointment": {
+  "dl-extract": {
+    en: { title: "Download DL Extract" },
+    hi: { title: "डीएल एक्सट्रेक्ट डाउनलोड करें" },
+  },
+
+  "fee-payment": {
+    en: { title: "Fee Payments" },
+    hi: { title: "शुल्क भुगतान" },
+  },
+
+  "print-application": {
+    en: { title: "Print Application Form" },
+    hi: { title: "आवेदन पत्र प्रिंट करें" },
+  },
+
+  "mobile-update": {
+    en: { title: "Update Mobile Number" },
+    hi: { title: "मोबाइल नंबर अपडेट करें" },
+  },
+
+  "withdraw-application": {
+    en: { title: "Withdraw Application" },
+    hi: { title: "आवेदन वापस लें" },
+  },
+
+  "dl-replacement": {
+    en: { title: "Replace DL / Other Document" },
+    hi: { title: "डीएल / अन्य दस्तावेज़ बदलें" },
+  },
+
+  "addition-of-class": {
+    en: { title: "Add Vehicle Class" },
+    hi: { title: "वाहन श्रेणी जोड़ें" },
+  },
+
+  "appointment": {
     en: { title: "Book an Appointment" },
     hi: { title: "अपॉइंटमेंट बुक करें" },
   },
 
-  "dl-pending": {
-    en: { title: "Complete Pending Application" },
-    hi: { title: "लंबित आवेदन पूरा करें" },
-  },
-
-  "dl-tutorial": {
+  "learner-test-tutorial": {
     en: { title: "Learner Test Tutorial" },
     hi: { title: "लर्नर टेस्ट ट्यूटोरियल" },
   },
 
-  "dl-vehicle-class": {
-    en: { title: "Vehicle Class Info" },
-    hi: { title: "वाहन श्रेणी जानकारी" },
+  "pending-application": {
+    en: { title: "Complete Pending Application" },
+    hi: { title: "लंबित आवेदन पूरा करें" },
+  },
+
+  "payment-status": {
+    en: { title: "Check Payment Status" },
+    hi: { title: "भुगतान स्थिति जांचें" },
+  },
+
+  "upload-document": {
+    en: { title: "Upload Document" },
+    hi: { title: "दस्तावेज़ अपलोड करें" },
+  },
+
+  "online-lltest": {
+    en: { title: "Online Learner Test" },
+    hi: { title: "ऑनलाइन लर्नर टेस्ट" },
+  },
+
+  "find-doctor": {
+    en: { title: "Find a Doctor" },
+    hi: { title: "डॉक्टर खोजें" },
+  },
+
+  "dl-status": {
+    en: { title: "Know Your Licence Details" },
+    hi: { title: "अपने लाइसेंस का विवरण जानें" },
   },
 };
 
@@ -674,7 +735,7 @@ function ServicePage({ slug, state, lang }) {
       return (
         <LicenceLookup service={localizedService} state={state} lang={lang} />
       );
-    case "dl-appointment":
+    case "appointment":
       return (
         <AppointmentBooking
           service={localizedService}
@@ -682,7 +743,7 @@ function ServicePage({ slug, state, lang }) {
           lang={lang}
         />
       );
-    case "dl-pending":
+    case "pending-application":
       return (
         <PendingApplication
           service={localizedService}
@@ -690,11 +751,11 @@ function ServicePage({ slug, state, lang }) {
           lang={lang}
         />
       );
-    case "dl-tutorial":
+    case "learner-test-tutorial":
       return (
         <TestTutorial service={localizedService} state={state} lang={lang} />
       );
-    case "dl-vehicle-class":
+    case "addition-of-class":
       return (
         <VehicleClassInfo
           service={localizedService}
