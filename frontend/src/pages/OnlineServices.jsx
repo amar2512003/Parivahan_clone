@@ -43,7 +43,7 @@ const DIRECTORY_COPY = {
     chooseHint: "Select a service to continue",
     openService: "Open service",
     notice:
-      "This independent hackathon demo uses sample interactions only; it does not submit, charge, or retrieve data from an official government service.",
+      "Build What Moves India",
   },
 
   hi: {
