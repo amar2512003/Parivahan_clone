@@ -8,8 +8,11 @@ import servicesRoutes from "./routes/services.js";
 import dlRoutes from "./routes/dl.js";
 import vehicleRoutes from "./routes/vehicles.js";
 import applicationRoutes from "./routes/applications.js";
+import { seedDatabase } from "./db/seed.js";
 
 const app = express();
+
+seedDatabase({ log: false });
 
 const allowedOrigins = [
   "http://localhost:5173",
