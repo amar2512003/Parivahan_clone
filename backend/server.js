@@ -12,7 +12,7 @@ import { seedDatabase } from "./db/seed.js";
 
 // Seed the demo database.
 // This keeps the sample data available for the hackathon demo.
-seedDatabase({ log: false });
+//seedDatabase({ log: false });
 
 const app = express();
 // const PORT = process.env.PORT || 5001;
