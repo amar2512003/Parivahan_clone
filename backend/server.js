@@ -15,7 +15,7 @@ import { seedDatabase } from "./db/seed.js";
 seedDatabase({ log: false });
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+// const PORT = process.env.PORT || 5001;
 
 // Allow both local development and the deployed frontend.
 const allowedOrigins = (
@@ -77,14 +77,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Local development only.
-// Vercel will use the exported Express app.
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(
-      `Parivahan-clone backend running on http://localhost:${PORT}`
-    );
-  });
-}
 
 export default app;
