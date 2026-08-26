@@ -40,6 +40,7 @@ import {
   SERVICE_BY_SLUG,
   SERVICE_REGIONS,
 } from "../data/drivingLicence";
+import IndiaMapStateSearch from "../components/IndiaMapStateSearch";
 
 /* =========================================================
    ICONS
@@ -79,12 +80,8 @@ const COPY = {
       eyebrow: "Driving licence services",
       title: "Start with your state",
       description:
-        "Select the state or service region where you want to use the driving licence portal. You’ll see every demo service available for that region next.",
-      step: "Step 1 of 2",
-      choose: "Choose your state / service region",
-      options: "29 options are available in this demonstration.",
+        "Search for the state or service region where you want to use the driving licence portal — the map will highlight it as you go.",
       search: "Search a state",
-      searchLabel: "Search states",
       noMatch: "No state matches",
     },
 
@@ -220,12 +217,8 @@ const COPY = {
       eyebrow: "ड्राइविंग लाइसेंस सेवाएं",
       title: "अपने राज्य से शुरू करें",
       description:
-        "ड्राइविंग लाइसेंस पोर्टल का उपयोग करने के लिए अपना राज्य या सेवा क्षेत्र चुनें। इसके बाद आपको उस क्षेत्र के लिए उपलब्ध सभी डेमो सेवाएं दिखाई देंगी।",
-      step: "चरण 1 में से 2",
-      choose: "अपना राज्य / सेवा क्षेत्र चुनें",
-      options: "इस डेमो में 29 विकल्प उपलब्ध हैं।",
+        "ड्राइविंग लाइसेंस पोर्टल के लिए वह राज्य या सेवा क्षेत्र खोजें जिसका आप उपयोग करना चाहते हैं — जैसे-जैसे आप टाइप करेंगे, मानचित्र उसे हाइलाइट करेगा।",
       search: "राज्य खोजें",
-      searchLabel: "राज्य खोजें",
       noMatch: "इससे मेल खाता कोई राज्य नहीं मिला",
     },
 
@@ -428,7 +421,7 @@ const SERVICE_TRANSLATIONS = {
     hi: { title: "वाहन श्रेणी जोड़ें" },
   },
 
-  "appointment": {
+  appointment: {
     en: { title: "Book an Appointment" },
     hi: { title: "अपॉइंटमेंट बुक करें" },
   },
@@ -558,86 +551,48 @@ export default function DrivingLicense() {
 }
 
 /* =========================================================
-   STATE SELECTION
+   STATE SELECTION — India map + search
 ========================================================= */
 
 function StateSelection({ lang }) {
   const navigate = useNavigate();
   const copy = COPY[lang].stateSelection;
 
-  const [query, setQuery] = useState("");
-
-  const filteredRegions = SERVICE_REGIONS.filter((state) => {
-    const englishName = state.name.toLowerCase();
-    const hindiName = (STATE_NAMES_HI[state.name] || "").toLowerCase();
-    const search = query.toLowerCase();
-
-    return englishName.includes(search) || hindiName.includes(search);
-  });
+  // Give the map/search component region names in the active language,
+  // while still returning the original region object (with `code`) on select.
+  const localizedRegions = useMemo(
+    () =>
+      SERVICE_REGIONS.map((state) => ({
+        ...state,
+        displayName: getStateName(state, lang),
+      })),
+    [lang]
+  );
 
   function chooseState(state) {
-    localStorage.setItem("dlSelectedState", state.code);
-    navigate(`/driving-license?state=${state.code}`);
+    // `state` comes back from IndiaMapStateSearch — resolve to the
+    // canonical region object by code in case only a partial object
+    // (e.g. with displayName) was passed through.
+    const resolved =
+      SERVICE_REGIONS.find((region) => region.code === state.code) || state;
+
+    localStorage.setItem("dlSelectedState", resolved.code);
+    navigate(`/driving-license?state=${resolved.code}`);
   }
 
   return (
     <div className="dl-page">
-      <section className="dl-hero">
-        <div className="max-w-6xl mx-auto px-4 py-10 sm:py-14">
-          <p className="eyebrow eyebrow-light">{copy.eyebrow}</p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl">
-            {copy.title}
-          </h2>
-          <p className="mt-3 text-blue-100 max-w-xl leading-relaxed">
-            {copy.description}
-          </p>
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-4 -mt-5 pb-14">
-        <div className="surface-card state-panel">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-7">
-            <div>
-              <p className="eyebrow">{copy.step}</p>
-              <h3 className="text-2xl font-semibold text-navy-950 mt-1">
-                {copy.choose}
-              </h3>
-              <p className="text-sm text-slate-500 mt-1">{copy.options}</p>
-            </div>
-
-            <label className="state-search">
-              <span className="sr-only">{copy.searchLabel}</span>
-              <span aria-hidden="true">⌕</span>
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={copy.search}
-              />
-            </label>
-          </div>
-
-          <div className="state-grid" role="list">
-            {filteredRegions.map((state) => (
-              <button
-                key={state.code}
-                className="state-option focus-ring"
-                onClick={() => chooseState(state)}
-              >
-                <span className="state-code">{state.code}</span>
-                <span>{getStateName(state, lang)}</span>
-                <span className="state-arrow" aria-hidden="true">
-                  →
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {filteredRegions.length === 0 && (
-            <p className="text-center text-sm text-slate-500 py-10">
-              {copy.noMatch} “{query}”.
-            </p>
-          )}
-        </div>
+      <section className="max-w-2xl mx-auto px-4 py-10 sm:py-16">
+        <IndiaMapStateSearch
+          key={lang}
+          regions={localizedRegions}
+          onSelectState={chooseState}
+          eyebrow={copy.eyebrow}
+          title={copy.title}
+          description={copy.description}
+          placeholder={copy.search}
+          noMatchLabel={copy.noMatch}
+        />
       </section>
     </div>
   );

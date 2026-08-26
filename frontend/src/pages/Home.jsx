@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import TrafficAnimation from "../components/TrafficAnimation"; // adjust path if needed
 
 export default function Home() {
   const { t } = useTranslation();
@@ -65,27 +66,36 @@ export default function Home() {
             title={t("home.rcCardTitle")}
             desc={t("home.rcCardDesc")}
             to="/vehicle-registration/rc-renewal"
-            accent="bg-indiagreen"
+            accent="bg-saffron"
           />
 
           <ServiceCard
             title={t("home.lookupTitle")}
             desc={t("home.lookupDesc")}
             to="/driving-license/dl-status"
-            accent="bg-navy-700"
+            accent="bg-indiagreen"
           />
 
           <ServiceCard
             title={t("home.onlineCardTitle")}
             desc={t("home.onlineCardDesc")}
             to="/online-services"
-            accent="bg-blue-500"
+            accent="bg-indiagreen"
           />
         </div>
 
         <p className="text-xs text-slate-500 mt-10 border-t pt-4">
           {t("home.notice")}
         </p>
+      </section>
+
+      {/* On the Move — animated traffic strip */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
+        <h3 className="text-xl font-semibold mb-6">
+          {t("home.onTheMove", "On the move")}
+        </h3>
+
+        <TrafficAnimation />
       </section>
     </div>
   );
