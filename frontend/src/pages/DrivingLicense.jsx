@@ -78,9 +78,6 @@ const COPY = {
   en: {
     stateSelection: {
       eyebrow: "Driving licence services",
-      title: "Start with your state",
-      description:
-        "Search for the state or service region where you want to use the driving licence portal — the map will highlight it as you go.",
       search: "Search a state",
       noMatch: "No state matches",
     },
@@ -215,9 +212,6 @@ const COPY = {
   hi: {
     stateSelection: {
       eyebrow: "ड्राइविंग लाइसेंस सेवाएं",
-      title: "अपने राज्य से शुरू करें",
-      description:
-        "ड्राइविंग लाइसेंस पोर्टल के लिए वह राज्य या सेवा क्षेत्र खोजें जिसका आप उपयोग करना चाहते हैं — जैसे-जैसे आप टाइप करेंगे, मानचित्र उसे हाइलाइट करेगा।",
       search: "राज्य खोजें",
       noMatch: "इससे मेल खाता कोई राज्य नहीं मिला",
     },
@@ -496,6 +490,7 @@ const STATE_NAMES_HI = {
   Uttarakhand: "उत्तराखंड",
   "West Bengal": "पश्चिम बंगाल",
   Delhi: "दिल्ली",
+  "Jammu & Kashmir": "जम्मू और कश्मीर",
 };
 
 function getStateName(state, lang) {
@@ -564,15 +559,15 @@ function StateSelection({ lang }) {
     () =>
       SERVICE_REGIONS.map((state) => ({
         ...state,
-        displayName: getStateName(state, lang),
+        name: getStateName(state, lang),
       })),
     [lang]
   );
 
   function chooseState(state) {
     // `state` comes back from IndiaMapStateSearch — resolve to the
-    // canonical region object by code in case only a partial object
-    // (e.g. with displayName) was passed through.
+    // canonical (English) region object by code, since the localized
+    // copy only had its `name` field swapped for display.
     const resolved =
       SERVICE_REGIONS.find((region) => region.code === state.code) || state;
 
@@ -588,8 +583,6 @@ function StateSelection({ lang }) {
           regions={localizedRegions}
           onSelectState={chooseState}
           eyebrow={copy.eyebrow}
-          title={copy.title}
-          description={copy.description}
           placeholder={copy.search}
           noMatchLabel={copy.noMatch}
         />

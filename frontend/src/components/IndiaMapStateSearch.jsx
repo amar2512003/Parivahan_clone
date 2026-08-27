@@ -60,8 +60,6 @@ export default function IndiaMapStateSearch({
   regions,
   onSelectState,
   eyebrow = "Driving licence services",
-  title = "Start with your state",
-  description = "Search for your state and we'll take you straight to its services.",
   placeholder = "Search a state\u2026",
   noMatchLabel = "No state matches",
   hintLabel = `${regions?.length ?? 0} states / regions available`,
@@ -165,10 +163,86 @@ export default function IndiaMapStateSearch({
 
   return (
     <section className="imss-root" ref={rootRef}>
-      <div className="imss-copy">
-        <p className="imss-eyebrow">{eyebrow}</p>
-        <h2 className="imss-title">{title}</h2>
-        <p className="imss-description">{description}</p>
+      <p className="imss-eyebrow">{eyebrow}</p>
+
+      <div className="imss-search-wrap">
+        <div className={`imss-search ${isOpen ? "imss-search--open" : ""}`}>
+          <span className="imss-search-icon" aria-hidden="true">
+            ⌕
+          </span>
+          <input
+            ref={inputRef}
+            className="imss-input"
+            value={query}
+            placeholder={placeholder}
+            disabled={Boolean(selectedState)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setIsOpen(true);
+            }}
+            onFocus={() => setIsOpen(true)}
+            onKeyDown={handleKeyDown}
+            role="combobox"
+            aria-expanded={isOpen}
+            aria-controls="imss-listbox"
+            aria-autocomplete="list"
+            aria-label="Search for a state"
+          />
+          {query && !selectedState && (
+            <button
+              type="button"
+              className="imss-clear"
+              aria-label="Clear search"
+              onClick={() => {
+                setQuery("");
+                setIsOpen(true);
+                inputRef.current?.focus();
+              }}
+            >
+              ×
+            </button>
+          )}
+        </div>
+
+        {isOpen && !selectedState && (
+          <ul id="imss-listbox" role="listbox" className="imss-listbox">
+            {filteredRegions.length === 0 && (
+              <li className="imss-empty">
+                {noMatchLabel} “{query}”.
+              </li>
+            )}
+            {filteredRegions.map((state, index) => (
+              <li
+                key={state.code}
+                role="option"
+                aria-selected={index === activeIndex}
+                className={`imss-option ${
+                  index === activeIndex ? "imss-option--active" : ""
+                }`}
+                onMouseEnter={() => {
+                  setActiveIndex(index);
+                  setHoverName(CODE_TO_MAP_NAME[state.code]);
+                }}
+                onMouseLeave={() => setHoverName(null)}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => commitSelection(state)}
+              >
+                <span className="imss-option-code">{state.code}</span>
+                <span>{state.name}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {!isOpen && !selectedState && (
+          <p className="imss-hint">{hintLabel}</p>
+        )}
+
+        {selectedState && (
+          <p className="imss-hint imss-hint--selected">
+            {selectedState.name} selected — opening services…
+          </p>
+        )}
       </div>
 
       <div className="imss-stage">
@@ -214,127 +288,35 @@ export default function IndiaMapStateSearch({
             );
           })}
         </svg>
-
-        <div className="imss-search-wrap">
-          <div className={`imss-search ${isOpen ? "imss-search--open" : ""}`}>
-            <span className="imss-search-icon" aria-hidden="true">
-              ⌕
-            </span>
-            <input
-              ref={inputRef}
-              className="imss-input"
-              value={query}
-              placeholder={placeholder}
-              disabled={Boolean(selectedState)}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setIsOpen(true);
-              }}
-              onFocus={() => setIsOpen(true)}
-              onKeyDown={handleKeyDown}
-              role="combobox"
-              aria-expanded={isOpen}
-              aria-controls="imss-listbox"
-              aria-autocomplete="list"
-              aria-label="Search for a state"
-            />
-            {query && !selectedState && (
-              <button
-                type="button"
-                className="imss-clear"
-                aria-label="Clear search"
-                onClick={() => {
-                  setQuery("");
-                  setIsOpen(true);
-                  inputRef.current?.focus();
-                }}
-              >
-                ×
-              </button>
-            )}
-          </div>
-
-          {isOpen && !selectedState && (
-            <ul id="imss-listbox" role="listbox" className="imss-listbox">
-              {filteredRegions.length === 0 && (
-                <li className="imss-empty">
-                  {noMatchLabel} “{query}”.
-                </li>
-              )}
-              {filteredRegions.map((state, index) => (
-                <li
-                  key={state.code}
-                  role="option"
-                  aria-selected={index === activeIndex}
-                  className={`imss-option ${
-                    index === activeIndex ? "imss-option--active" : ""
-                  }`}
-                  onMouseEnter={() => {
-                    setActiveIndex(index);
-                    setHoverName(CODE_TO_MAP_NAME[state.code]);
-                  }}
-                  onMouseLeave={() => setHoverName(null)}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => commitSelection(state)}
-                >
-                  <span className="imss-option-code">{state.code}</span>
-                  <span>{state.name}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {!isOpen && !selectedState && (
-            <p className="imss-hint">{hintLabel}</p>
-          )}
-
-          {selectedState && (
-            <p className="imss-hint imss-hint--selected">
-              {selectedState.name} selected — opening services…
-            </p>
-          )}
-        </div>
       </div>
 
       <style>{`
         .imss-root {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          align-items: center;
+          gap: 0.9rem;
         }
-        .imss-copy { max-width: 42rem; }
         .imss-eyebrow {
           font-size: 0.75rem;
           font-weight: 600;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #2563eb;
-          margin: 0 0 0.35rem;
-        }
-        .imss-title {
-          font-size: 1.75rem;
-          font-weight: 700;
-          letter-spacing: -0.01em;
-          color: #0b1d3a;
-          margin: 0 0 0.5rem;
-        }
-        .imss-description {
-          color: #64748b;
-          line-height: 1.55;
           margin: 0;
         }
 
         .imss-stage {
           position: relative;
           width: 100%;
-          min-height: 560px;
+          min-height: 660px;
           border-radius: 1.5rem;
           background: radial-gradient(120% 120% at 50% 0%, #eef3fb 0%, #e2e8f0 60%, #dbe4f0 100%);
           border: 1px solid #e2e8f0;
           overflow: hidden;
         }
         @media (min-width: 640px) {
-          .imss-stage { min-height: 680px; }
+          .imss-stage { min-height: 820px; }
         }
 
         .imss-svg {
@@ -342,7 +324,7 @@ export default function IndiaMapStateSearch({
           inset: 0;
           width: 100%;
           height: 100%;
-          padding: 2rem 0;
+          padding: 1.5rem 0;
         }
 
         .imss-path {
@@ -382,15 +364,12 @@ export default function IndiaMapStateSearch({
         }
 
         .imss-search-wrap {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: min(420px, 88%);
+          position: relative;
+          width: min(480px, 92%);
           display: flex;
           flex-direction: column;
           align-items: stretch;
-          z-index: 2;
+          z-index: 3;
         }
 
         .imss-search {
@@ -439,8 +418,12 @@ export default function IndiaMapStateSearch({
         .imss-clear:hover { background: #e2e8f0; }
 
         .imss-listbox {
+          position: absolute;
+          top: calc(100% + 0.6rem);
+          left: 0;
+          right: 0;
           list-style: none;
-          margin: 0.6rem 0 0;
+          margin: 0;
           padding: 0.4rem;
           max-height: 15rem;
           overflow-y: auto;
