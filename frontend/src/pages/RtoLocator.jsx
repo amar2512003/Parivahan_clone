@@ -1,11 +1,171 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { Building2, LocateFixed, MapPin, Navigation, Phone, Search, X } from "lucide-react";
 import { RTO_OFFICES, RTO_STATES } from "../data/rtoOffices";
 
 const INDIA_CENTER = [22.5937, 78.9629];
+
+/* =========================================================
+   COPY (bilingual UI chrome)
+========================================================= */
+
+const COPY = {
+  en: {
+    backToHome: "← Back to home",
+    eyebrow: "RTO office locator",
+    title: "Find an RTO office near you",
+    description:
+      "Choose a state to view its RTO offices, contact details and locations, or use your device location to identify the nearest seeded office.",
+    step1: "Step 1",
+    chooseState: "Choose a state",
+    chooseStateHint: "Select a state to narrow the map and office list.",
+    stateLabel: "State / UT",
+    allStates: "All states and regions",
+    viewAll: "View all locators",
+    step2: "Step 2",
+    nearestRto: "Nearest RTO",
+    nearestHint: (stateName) =>
+      `Share your location to find the closest office${stateName ? ` in ${stateName}` : ""}.`,
+    useMyLocation: "Use my location",
+    findingLocation: "Finding your location…",
+    locationUnsupported:
+      "Location is not supported by this browser. You can still choose a state below.",
+    locationDenied:
+      "We could not access your location. Allow location access, then try again.",
+    nearestSeeded: "Nearest seeded office",
+    kmAway: (km) => `${km} km away`,
+    showOnMap: "Show on map",
+    interactiveMap: "Interactive map",
+    allLocators: "All RTO office locators",
+    stateOffices: (stateName) => `${stateName} RTO offices`,
+    officeCount: (n) => `${n} ${n === 1 ? "office" : "offices"}`,
+    officeDirectory: "Office directory",
+    allOffices: "All RTO offices",
+    officesInState: (stateName) => `RTO offices in ${stateName}`,
+    selectToFocus: "Select an office to focus it on the map.",
+    searchPlaceholder: "Search office or city",
+    searchSrLabel: "Search RTO offices",
+    nearestBadge: "Nearest",
+    noMatches: "No RTO offices match that search.",
+    clearSearch: "Clear search",
+    yourLocation: "Your location",
+    footerNotice:
+      "Demo locator: office locations, addresses and phone numbers are seeded sample data for this prototype. Confirm details with the relevant State Transport Department before visiting.",
+  },
+
+  hi: {
+    backToHome: "← होम पर वापस जाएं",
+    eyebrow: "आरटीओ कार्यालय लोकेटर",
+    title: "अपने पास का आरटीओ कार्यालय खोजें",
+    description:
+      "आरटीओ कार्यालय, संपर्क विवरण और स्थान देखने के लिए एक राज्य चुनें, या अपने डिवाइस की लोकेशन का उपयोग करके निकटतम कार्यालय पहचानें।",
+    step1: "चरण 1",
+    chooseState: "राज्य चुनें",
+    chooseStateHint: "मानचित्र और कार्यालय सूची को सीमित करने के लिए एक राज्य चुनें।",
+    stateLabel: "राज्य / केंद्र शासित प्रदेश",
+    allStates: "सभी राज्य और क्षेत्र",
+    viewAll: "सभी लोकेटर देखें",
+    step2: "चरण 2",
+    nearestRto: "निकटतम आरटीओ",
+    nearestHint: (stateName) =>
+      `निकटतम कार्यालय खोजने के लिए अपनी लोकेशन साझा करें${stateName ? ` — ${stateName} में` : ""}।`,
+    useMyLocation: "मेरी लोकेशन का उपयोग करें",
+    findingLocation: "आपकी लोकेशन खोजी जा रही है…",
+    locationUnsupported:
+      "इस ब्राउज़र में लोकेशन समर्थित नहीं है। आप नीचे से एक राज्य चुन सकते हैं।",
+    locationDenied:
+      "हम आपकी लोकेशन तक नहीं पहुंच सके। लोकेशन एक्सेस की अनुमति दें, फिर पुनः प्रयास करें।",
+    nearestSeeded: "निकटतम कार्यालय",
+    kmAway: (km) => `${km} किमी दूर`,
+    showOnMap: "मानचित्र पर दिखाएं",
+    interactiveMap: "इंटरैक्टिव मानचित्र",
+    allLocators: "सभी आरटीओ कार्यालय लोकेटर",
+    stateOffices: (stateName) => `${stateName} के आरटीओ कार्यालय`,
+    officeCount: (n) => `${n} ${n === 1 ? "कार्यालय" : "कार्यालय"}`,
+    officeDirectory: "कार्यालय निर्देशिका",
+    allOffices: "सभी आरटीओ कार्यालय",
+    officesInState: (stateName) => `${stateName} में आरटीओ कार्यालय`,
+    selectToFocus: "किसी कार्यालय को मानचित्र पर देखने के लिए उसे चुनें।",
+    searchPlaceholder: "कार्यालय या शहर खोजें",
+    searchSrLabel: "आरटीओ कार्यालय खोजें",
+    nearestBadge: "निकटतम",
+    noMatches: "इस खोज से कोई आरटीओ कार्यालय मेल नहीं खाता।",
+    clearSearch: "खोज साफ़ करें",
+    yourLocation: "आपकी लोकेशन",
+    footerNotice:
+      "डेमो लोकेटर: कार्यालयों के स्थान, पते और फोन नंबर इस प्रोटोटाइप के लिए बनाया गया नमूना डेटा हैं। जाने से पहले संबंधित राज्य परिवहन विभाग से विवरण की पुष्टि करें।",
+  },
+};
+
+// Standard English -> Hindi names for Indian states/UTs. This lets the page
+// localize state names for display without needing the underlying
+// data/rtoOffices.js file itself to carry bilingual data.
+const STATE_NAME_HI = {
+  "Andhra Pradesh": "आंध्र प्रदेश",
+  "Arunachal Pradesh": "अरुणाचल प्रदेश",
+  Assam: "असम",
+  Bihar: "बिहार",
+  Chhattisgarh: "छत्तीसगढ़",
+  Goa: "गोवा",
+  Gujarat: "गुजरात",
+  Haryana: "हरियाणा",
+  "Himachal Pradesh": "हिमाचल प्रदेश",
+  Jharkhand: "झारखंड",
+  Karnataka: "कर्नाटक",
+  Kerala: "केरल",
+  "Madhya Pradesh": "मध्य प्रदेश",
+  Maharashtra: "महाराष्ट्र",
+  Manipur: "मणिपुर",
+  Meghalaya: "मेघालय",
+  Mizoram: "मिज़ोरम",
+  Nagaland: "नागालैंड",
+  Odisha: "ओडिशा",
+  Punjab: "पंजाब",
+  Rajasthan: "राजस्थान",
+  Sikkim: "सिक्किम",
+  "Tamil Nadu": "तमिलनाडु",
+  "Tamilnadu": "तमिलनाडु",
+  Telangana: "तेलंगाना",
+  Tripura: "त्रिपुरा",
+  "Uttar Pradesh": "उत्तर प्रदेश",
+  Uttarakhand: "उत्तराखंड",
+  "West Bengal": "पश्चिम बंगाल",
+  "Andaman and Nicobar Islands": "अंडमान और निकोबार द्वीप समूह",
+  Chandigarh: "चंडीगढ़",
+  "Dadra and Nagar Haveli and Daman and Diu":
+    "दादरा और नगर हवेली और दमन और दीव",
+  Delhi: "दिल्ली",
+  "NCT of Delhi": "दिल्ली",
+  "Jammu and Kashmir": "जम्मू और कश्मीर",
+  Ladakh: "लद्दाख",
+  Lakshadweep: "लक्षद्वीप",
+  Puducherry: "पुडुचेरी",
+};
+
+function localizeStateName(name, lang) {
+  if (lang !== "hi" || !name) return name;
+  return STATE_NAME_HI[name] || name;
+}
+
+function localizeShortName(shortName, lang) {
+  if (lang !== "hi" || !shortName) return shortName;
+  return shortName.replace(/^RTO\s+/i, "आरटीओ ");
+}
+
+function localizeAddress(address, lang) {
+  if (lang !== "hi" || !address) return address;
+  return address
+    .split(",")
+    .map((part) => {
+      const trimmed = part.trim();
+      if (trimmed === "Transport Department Campus") return "परिवहन विभाग परिसर";
+      return STATE_NAME_HI[trimmed] || trimmed;
+    })
+    .join(", ");
+}
 
 function distanceInKilometres([lat1, lon1], [lat2, lon2]) {
   const earthRadiusKm = 6371;
@@ -46,7 +206,7 @@ function MapViewport({ offices, userLocation, focusedOffice }) {
   return null;
 }
 
-function RtoMap({ offices, userLocation, focusedOffice, onOfficeSelect }) {
+function RtoMap({ offices, userLocation, focusedOffice, onOfficeSelect, lang, copy }) {
   return (
     <MapContainer
       center={INDIA_CENTER}
@@ -83,9 +243,9 @@ function RtoMap({ offices, userLocation, focusedOffice, onOfficeSelect }) {
             eventHandlers={{ click: () => onOfficeSelect(office) }}
           >
             <Popup>
-              <strong>{office.shortName}</strong>
+              <strong>{localizeShortName(office.shortName, lang)}</strong>
               <br />
-              {office.address}
+              {localizeAddress(office.address, lang)}
               <br />
               {office.phone}
             </Popup>
@@ -99,7 +259,7 @@ function RtoMap({ offices, userLocation, focusedOffice, onOfficeSelect }) {
           radius={9}
           pathOptions={{ color: "#ffffff", weight: 3, fillColor: "#2563eb", fillOpacity: 1 }}
         >
-          <Popup>Your location</Popup>
+          <Popup>{copy.yourLocation}</Popup>
         </CircleMarker>
       )}
     </MapContainer>
@@ -107,6 +267,10 @@ function RtoMap({ offices, userLocation, focusedOffice, onOfficeSelect }) {
 }
 
 export default function RtoLocator() {
+  const { i18n } = useTranslation();
+  const lang = i18n.language === "hi" ? "hi" : "en";
+  const copy = COPY[lang];
+
   const [stateCode, setStateCode] = useState("");
   const [officeQuery, setOfficeQuery] = useState("");
   const [userLocation, setUserLocation] = useState(null);
@@ -115,6 +279,7 @@ export default function RtoLocator() {
   const [focusedOffice, setFocusedOffice] = useState(null);
 
   const selectedState = RTO_STATES.find((state) => state.code === stateCode);
+  const selectedStateName = selectedState ? localizeStateName(selectedState.name, lang) : "";
 
   const stateOffices = useMemo(
     () =>
@@ -157,7 +322,7 @@ export default function RtoLocator() {
 
   function requestLocation() {
     if (!navigator.geolocation) {
-      setLocationError("Location is not supported by this browser. You can still choose a state below.");
+      setLocationError(copy.locationUnsupported);
       return;
     }
 
@@ -170,7 +335,7 @@ export default function RtoLocator() {
       },
       () => {
         setLocationStatus("idle");
-        setLocationError("We could not access your location. Allow location access, then try again.");
+        setLocationError(copy.locationDenied);
       },
       { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
     );
@@ -185,15 +350,15 @@ export default function RtoLocator() {
       <section className="rto-hero text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <Link to="/" className="inline-flex text-sm text-blue-100 hover:text-white focus-ring rounded">
-            ← Back to home
+            {copy.backToHome}
           </Link>
           <div className="mt-7 max-w-3xl">
-            <p className="eyebrow eyebrow-light">RTO office locator</p>
+            <p className="eyebrow eyebrow-light">{copy.eyebrow}</p>
             <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
-              Find an RTO office near you
+              {copy.title}
             </h1>
             <p className="mt-4 max-w-2xl text-blue-100 leading-relaxed">
-              Choose a state to view its RTO offices, contact details and locations, or use your device location to identify the nearest seeded office.
+              {copy.description}
             </p>
           </div>
         </div>
@@ -207,16 +372,16 @@ export default function RtoLocator() {
                 <Building2 size={22} aria-hidden="true" />
               </span>
               <div>
-                <p className="eyebrow">Step 1</p>
-                <h2 className="mt-1 text-xl font-bold text-navy-950">Choose a state</h2>
+                <p className="eyebrow">{copy.step1}</p>
+                <h2 className="mt-1 text-xl font-bold text-navy-950">{copy.chooseState}</h2>
                 <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                  Select a state to narrow the map and office list.
+                  {copy.chooseStateHint}
                 </p>
               </div>
             </div>
 
             <label className="mt-6 block text-sm font-semibold text-navy-950" htmlFor="rto-state">
-              State / UT
+              {copy.stateLabel}
             </label>
             <select
               id="rto-state"
@@ -224,10 +389,10 @@ export default function RtoLocator() {
               onChange={chooseState}
               className="mt-2 form-input w-full"
             >
-              <option value="">All states and regions</option>
+              <option value="">{copy.allStates}</option>
               {RTO_STATES.map((state) => (
                 <option key={state.code} value={state.code}>
-                  {state.name}
+                  {localizeStateName(state.name, lang)}
                 </option>
               ))}
             </select>
@@ -238,7 +403,7 @@ export default function RtoLocator() {
                 onClick={showAllOffices}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-navy-950 focus-ring rounded"
               >
-                <X size={15} aria-hidden="true" /> View all locators
+                <X size={15} aria-hidden="true" /> {copy.viewAll}
               </button>
             )}
 
@@ -248,10 +413,10 @@ export default function RtoLocator() {
                   <LocateFixed size={21} aria-hidden="true" />
                 </span>
                 <div>
-                  <p className="eyebrow">Step 2</p>
-                  <h2 className="mt-1 text-lg font-bold text-navy-950">Nearest RTO</h2>
+                  <p className="eyebrow">{copy.step2}</p>
+                  <h2 className="mt-1 text-lg font-bold text-navy-950">{copy.nearestRto}</h2>
                   <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                    Share your location to find the closest office{selectedState ? ` in ${selectedState.name}` : ""}.
+                    {copy.nearestHint(selectedStateName)}
                   </p>
                 </div>
               </div>
@@ -263,7 +428,7 @@ export default function RtoLocator() {
                 className="button-primary mt-5 inline-flex w-full gap-2 focus-ring"
               >
                 <Navigation size={16} aria-hidden="true" />
-                {locationStatus === "loading" ? "Finding your location…" : "Use my location"}
+                {locationStatus === "loading" ? copy.findingLocation : copy.useMyLocation}
               </button>
               {locationError && <p className="mt-3 text-sm text-red-700">{locationError}</p>}
 
@@ -273,13 +438,15 @@ export default function RtoLocator() {
                   onClick={focusNearestOffice}
                   className="nearest-rto-card mt-5 w-full text-left focus-ring"
                 >
-                  <span className="nearest-rto-label">Nearest seeded office</span>
-                  <span className="mt-1 block font-bold text-navy-950">{nearestOffice.office.shortName}</span>
+                  <span className="nearest-rto-label">{copy.nearestSeeded}</span>
+                  <span className="mt-1 block font-bold text-navy-950">
+                    {localizeShortName(nearestOffice.office.shortName, lang)}
+                  </span>
                   <span className="mt-1 block text-sm text-slate-600">
-                    {nearestOffice.distance.toFixed(1)} km away
+                    {copy.kmAway(nearestOffice.distance.toFixed(1))}
                   </span>
                   <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-800">
-                    Show on map <span aria-hidden="true">→</span>
+                    {copy.showOnMap} <span aria-hidden="true">→</span>
                   </span>
                 </button>
               )}
@@ -289,13 +456,13 @@ export default function RtoLocator() {
           <div className="surface-card overflow-hidden">
             <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
               <div>
-                <p className="eyebrow">Interactive map</p>
+                <p className="eyebrow">{copy.interactiveMap}</p>
                 <h2 className="mt-1 text-xl font-bold text-navy-950">
-                  {selectedState ? `${selectedState.name} RTO offices` : "All RTO office locators"}
+                  {selectedState ? copy.stateOffices(selectedStateName) : copy.allLocators}
                 </h2>
               </div>
               <span className="inline-flex w-fit rounded-full bg-blue-50 px-3 py-1.5 text-sm font-semibold text-navy-800">
-                {visibleOffices.length} {visibleOffices.length === 1 ? "office" : "offices"}
+                {copy.officeCount(visibleOffices.length)}
               </span>
             </div>
             <RtoMap
@@ -303,6 +470,8 @@ export default function RtoLocator() {
               userLocation={userLocation}
               focusedOffice={focusedOffice}
               onOfficeSelect={setFocusedOffice}
+              lang={lang}
+              copy={copy}
             />
           </div>
         </div>
@@ -310,17 +479,15 @@ export default function RtoLocator() {
         <div className="mt-8 surface-card overflow-hidden">
           <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="eyebrow">Office directory</p>
+              <p className="eyebrow">{copy.officeDirectory}</p>
               <h2 className="mt-1 text-xl font-bold text-navy-950">
-                {selectedState ? `RTO offices in ${selectedState.name}` : "All RTO offices"}
+                {selectedState ? copy.officesInState(selectedStateName) : copy.allOffices}
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
-                Select an office to focus it on the map.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{copy.selectToFocus}</p>
             </div>
             <label className="relative block w-full lg:max-w-sm" htmlFor="office-search">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={17} aria-hidden="true" />
-              <span className="sr-only">Search RTO offices</span>
+              <span className="sr-only">{copy.searchSrLabel}</span>
               <input
                 id="office-search"
                 value={officeQuery}
@@ -328,7 +495,7 @@ export default function RtoLocator() {
                   setOfficeQuery(event.target.value);
                   setFocusedOffice(null);
                 }}
-                placeholder="Search office or city"
+                placeholder={copy.searchPlaceholder}
                 className="form-input w-full pl-9"
               />
             </label>
@@ -352,13 +519,19 @@ export default function RtoLocator() {
                       </span>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="font-bold text-navy-950">{office.shortName}</h3>
-                          {isNearest && <span className="nearest-rto-label">Nearest</span>}
+                          <h3 className="font-bold text-navy-950">
+                            {localizeShortName(office.shortName, lang)}
+                          </h3>
+                          {isNearest && <span className="nearest-rto-label">{copy.nearestBadge}</span>}
                         </div>
-                        <p className="mt-1 text-sm font-medium text-slate-600">{office.state}</p>
+                        <p className="mt-1 text-sm font-medium text-slate-600">
+                          {localizeStateName(office.state, lang)}
+                        </p>
                       </div>
                     </div>
-                    <p className="mt-4 text-sm leading-relaxed text-slate-600">{office.address}</p>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                      {localizeAddress(office.address, lang)}
+                    </p>
                     <p className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-navy-800">
                       <Phone size={15} aria-hidden="true" /> {office.phone}
                     </p>
@@ -368,17 +541,15 @@ export default function RtoLocator() {
             </div>
           ) : (
             <div className="px-6 py-12 text-center">
-              <p className="font-semibold text-navy-950">No RTO offices match that search.</p>
+              <p className="font-semibold text-navy-950">{copy.noMatches}</p>
               <button type="button" onClick={() => setOfficeQuery("")} className="mt-3 text-sm font-semibold text-navy-700 underline">
-                Clear search
+                {copy.clearSearch}
               </button>
             </div>
           )}
         </div>
 
-        <p className="mt-5 text-xs leading-relaxed text-slate-500">
-          Demo locator: office locations, addresses and phone numbers are seeded sample data for this prototype. Confirm details with the relevant State Transport Department before visiting.
-        </p>
+        <p className="mt-5 text-xs leading-relaxed text-slate-500">{copy.footerNotice}</p>
       </section>
     </div>
   );
