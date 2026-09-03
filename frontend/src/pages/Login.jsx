@@ -85,7 +85,13 @@ export default function Login() {
           </button>
         </form>
 
-        <Link to="/" className="block text-center text-sm text-navy-700 mt-6 hover:underline">
+        <p className="text-center text-sm text-slate-600 mt-6">
+          {t("signup.noAccount")}{" "}
+          <Link to="/signup" className="text-navy-700 font-medium hover:underline">
+            {t("nav.signup")}
+          </Link>
+        </p>
+        <Link to="/" className="block text-center text-sm text-navy-700 mt-3 hover:underline">
           {t("login.back")}
         </Link>
       </div>

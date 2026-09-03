@@ -112,12 +112,21 @@ export default function Header() {
               </button>
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="text-sm px-3 py-1.5 rounded-md bg-saffron text-white hover:opacity-90 transition focus-ring"
-            >
-              {t("nav.login")}
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/login"
+                className="text-sm px-3 py-1.5 rounded-md border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white transition focus-ring"
+              >
+                {t("nav.login")}
+              </Link>
+
+              <Link
+                to="/signup"
+                className="text-sm px-3 py-1.5 rounded-md bg-saffron text-white hover:opacity-90 transition focus-ring"
+              >
+                {t("nav.signup")}
+              </Link>
+            </div>
           )}
         </div>
       </div>

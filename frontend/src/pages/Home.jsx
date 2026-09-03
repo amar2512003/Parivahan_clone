@@ -23,7 +23,7 @@ export default function Home() {
               </p>
 
               <Link
-                to="/driving-license"
+                to="/rto-locator"
                 className="inline-block bg-saffron px-6 py-3 rounded-md font-medium hover:opacity-90 transition focus-ring"
               >
                 {t("hero.cta")}

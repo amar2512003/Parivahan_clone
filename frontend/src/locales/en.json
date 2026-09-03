@@ -12,13 +12,14 @@
     "vehicleServices": "Vehicle Services",
     "other": "Other Services",
     "login": "Login",
+    "signup": "Sign Up",
     "logout": "Logout",
     "dashboard": "Dashboard"
   },
   "hero": {
     "title": "All your vehicle documents, reimagined",
     "subtitle": "A simpler, faster, mobile-friendly way to access driving licence and vehicle registration services.",
-    "cta": "Explore Services"
+    "cta": "RTO Locator"
   },
   "home": {
     "quickServices": "Quick Services",
@@ -43,6 +44,17 @@
     "backendUnavailable": "Unable to reach the demo service. Start the backend, then try again.",
     "error": "Invalid username or password.",
     "back": "Back to Home"
+  },
+  "signup": {
+    "title": "Create your Parivahan Sewa account",
+    "subtitle": "Sign up with dummy details ",
+    "fullName": "Full Name",
+    "mobile": "Mobile Number",
+    "confirmPassword": "Confirm Password",
+    "submit": "Sign Up",
+    "passwordMismatch": "Passwords do not match.",
+    "haveAccount": "Already have an account?",
+    "noAccount": "New here?"
   },
   "dl": {
     "title": "Driving Licence Related Services",

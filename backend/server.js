@@ -8,11 +8,12 @@ import servicesRoutes from "./routes/services.js";
 import dlRoutes from "./routes/dl.js";
 import vehicleRoutes from "./routes/vehicles.js";
 import applicationRoutes from "./routes/applications.js";
+import chatRoutes from "./routes/chat.js";
 import { seedDatabase } from "./db/seed.js";
 
 const app = express();
 
-seedDatabase({ log: false });
+await seedDatabase({ log: false });
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -60,6 +61,7 @@ app.use("/api/services", servicesRoutes);
 app.use("/api/dl", dlRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/chat", chatRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -77,5 +79,14 @@ app.use((err, req, res, next) => {
   });
 });
 
+
+// Vercel imports `app` and wraps it as a serverless function (see vercel.json),
+// so only bind a real port when running locally (npm run dev / npm start).
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () => {
+    console.log(`Parivahan-clone backend running on http://localhost:${PORT}`);
+  });
+}
 
 export default app;

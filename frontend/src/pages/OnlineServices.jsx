@@ -20,6 +20,7 @@ import {
   SERVICE_BY_SLUG,
   VEHICLE_RELATED_SERVICES,
 } from "../data/onlineServices";
+import MockCheckout from "../components/MockCheckout";
 
 const formatNumber = (value) =>
   new Intl.NumberFormat("en-IN").format(value);
@@ -34,9 +35,8 @@ const DIRECTORY_COPY = {
     description:
       "Start with the service you need. Each flow is organised around one clear task, with the information and next step kept together.",
     chips: [
-      "8 digital services",
+      "Digital services",
       "Simple task-based flows",
-      "Demo data only",
     ],
     chooseLabel: "Choose a service",
     chooseTitle: "What would you like to do?",
@@ -61,7 +61,7 @@ const DIRECTORY_COPY = {
     chooseHint: "आगे बढ़ने के लिए एक सेवा चुनें",
     openService: "सेवा खोलें",
     notice:
-      "Build What Moves India",
+      "भारत को गति देने वाला निर्माण करें",
   },
 };
 
@@ -85,7 +85,15 @@ const HINDI_UTILITY_CONTENT = {
     ],
     button: "चालान देखें",
     result:
-      "इस नमूना खोज में कोई खुला चालान नहीं मिला। वास्तविक सेवा में सत्यापित चालान और भुगतान विकल्प यहां दिखाई देंगे।",
+      "इस वाहन के लिए एक बकाया चालान मिला। इसे बंद करने के लिए नीचे चालान राशि का भुगतान करें।",
+    paidResult:
+      "चालान का भुगतान सफलतापूर्वक हो गया। वास्तविक सेवा में भुगतान रसीद और अद्यतन चालान स्थिति डाउनलोड के लिए उपलब्ध होगी।",
+    payment: {
+      amount: 500,
+      feeAmount: 9,
+      purpose: "यातायात चालान भुगतान",
+      reference: "चालान संख्या TC-2026-00214 · सिग्नल उल्लंघन",
+    },
     sideTitle: "ई-चालान सेवाएं",
     sideItems: [
       "चालान विवरण देखें",
@@ -160,7 +168,15 @@ const HINDI_UTILITY_CONTENT = {
     ],
     button: "आवेदन पर जारी रखें",
     result:
-      "आपकी नमूना आवेदन प्रक्रिया तैयार है। अगली स्क्रीन पर परमिट-विशिष्ट दस्तावेज़ और शुल्क विवरण मांगे जाएंगे।",
+      "आपका परमिट आवेदन तैयार है। इसे जमा करने के लिए नीचे आवेदन शुल्क का भुगतान करें।",
+    paidResult:
+      "परमिट आवेदन शुल्क का भुगतान हो गया और आपका आवेदन समीक्षा के लिए जमा कर दिया गया है। वास्तविक सेवा में आरटीओ सत्यापन के बाद परमिट जारी किया जाएगा।",
+    payment: {
+      amount: 1500,
+      feeAmount: 25,
+      purpose: "परमिट आवेदन शुल्क",
+      reference: "आवेदन शुल्क — गैर-वापसी योग्य",
+    },
     sideTitle: "शुरू करने से पहले",
     sideItems: [
       "आरसी और बीमा विवरण तैयार रखें",
@@ -252,7 +268,15 @@ const HINDI_UTILITY_CONTENT = {
     ],
     button: "कर का अनुमान लगाएं",
     result:
-      "नमूना अनुमान तैयार है। वास्तविक सेवा भुगतान से पहले वाहन और प्रवेश राज्य के विवरण से देय कर की गणना करेगी।",
+      "इस वाहन और मार्ग के लिए अनुमानित चेकपोस्ट कर नीचे दिखाया गया है। ट्रांज़िट पास बनाने के लिए भुगतान करें।",
+    paidResult:
+      "चेकपोस्ट कर का भुगतान हो गया। वास्तविक सेवा इस प्रवेश के लिए एक डिजिटल ट्रांज़िट पास जनरेट करेगी।",
+    payment: {
+      amount: 850,
+      feeAmount: 15,
+      purpose: "चेकपोस्ट कर भुगतान",
+      reference: "प्रवेश चेकपोस्ट — एकल ट्रांज़िट के लिए मान्य",
+    },
     sideTitle: "भुगतान सहायता",
     sideItems: [
       "अनुमानित कर की गणना करें",
@@ -383,6 +407,22 @@ const NATIONAL_PERMIT_COPY = {
     ],
     notice:
       "Permit figures are displayed from the supplied report for 01-04-2025 to 25-08-2026. This is a read-only demo dashboard.",
+    payment: {
+      purpose: "National permit payment",
+      reference: "National Permit Authorization — annual renewal",
+      successDetail:
+        "National permit payment completed. This is dummy data only — no real permit or payment was created.",
+    },
+    track: {
+      title: "Transaction status",
+      detail:
+        "Reference NPA-TXN-48213 · Status: Verified · Bank: HDFC Bank (sample data).",
+    },
+    print: {
+      title: "Authorization ready",
+      detail:
+        "A sample authorization certificate (PDF) would be available to download here in a live service.",
+    },
   },
 
   hi: {
@@ -421,8 +461,26 @@ const NATIONAL_PERMIT_COPY = {
     ],
     notice:
       "परमिट आंकड़े 01-04-2025 से 25-08-2026 तक की उपलब्ध कराई गई रिपोर्ट से प्रदर्शित किए गए हैं। यह केवल-पढ़ने योग्य डेमो डैशबोर्ड है।",
+    payment: {
+      purpose: "राष्ट्रीय परमिट भुगतान",
+      reference: "राष्ट्रीय परमिट प्राधिकरण — वार्षिक नवीनीकरण",
+      successDetail:
+        "राष्ट्रीय परमिट भुगतान पूरा हुआ। यह केवल डमी डेटा है — कोई वास्तविक परमिट या भुगतान नहीं बनाया गया।",
+    },
+    track: {
+      title: "लेनदेन स्थिति",
+      detail:
+        "संदर्भ NPA-TXN-48213 · स्थिति: सत्यापित · बैंक: एचडीएफसी बैंक (नमूना डेटा)।",
+    },
+    print: {
+      title: "प्राधिकरण तैयार है",
+      detail:
+        "वास्तविक सेवा में यहां एक नमूना प्राधिकरण प्रमाणपत्र (पीडीएफ) डाउनलोड के लिए उपलब्ध होगा।",
+    },
   },
 };
+
+const NATIONAL_PERMIT_PAYMENT_AMOUNT = { amount: 5000, feeAmount: 49 };
 
 function localizeService(service, lang) {
   return {
@@ -588,7 +646,15 @@ function ServiceUtility({ service, lang }) {
             ],
             button: "View challans",
             result:
-              "No open challans were found for this sample lookup. In a live service, verified challans and payment options would appear here.",
+              "A pending challan was found for this vehicle. Pay the challan amount below to close it.",
+            paidResult:
+              "Challan paid successfully. In a live service, a payment receipt and updated challan status would be available to download.",
+            payment: {
+              amount: 500,
+              feeAmount: 9,
+              purpose: "Traffic challan payment",
+              reference: "Challan No. TC-2026-00214 · Signal jump",
+            },
             sideTitle: "eChallan services",
             sideItems: [
               "View challan details",
@@ -678,7 +744,15 @@ function ServiceUtility({ service, lang }) {
                 button:
                   "Continue to application",
                 result:
-                  "Your sample application journey is ready. The next screen would request the permit-specific documents and fee details.",
+                  "Your permit application is ready. Pay the application fee below to submit it.",
+                paidResult:
+                  "Permit application fee paid and your application has been submitted for review. A live service would issue the permit after RTO verification.",
+                payment: {
+                  amount: 1500,
+                  feeAmount: 25,
+                  purpose: "Permit application fee",
+                  reference: "Application fee — non-refundable",
+                },
                 sideTitle:
                   "Before you begin",
                 sideItems: [
@@ -788,7 +862,15 @@ function ServiceUtility({ service, lang }) {
                     button:
                       "Estimate tax",
                     result:
-                      "Sample estimate prepared. A live service would calculate the payable tax from the vehicle and entry-state details before payment.",
+                      "Estimated checkpost tax for this vehicle and route is shown below. Pay to generate your transit pass.",
+                    paidResult:
+                      "Checkpost tax paid. A live service would generate a digital transit pass valid for this entry.",
+                    payment: {
+                      amount: 850,
+                      feeAmount: 15,
+                      purpose: "Checkpost tax payment",
+                      reference: "Entry checkpost — valid for single transit",
+                    },
                     sideTitle:
                       "Payment support",
                     sideItems: [
@@ -909,7 +991,7 @@ function ServiceUtility({ service, lang }) {
       />
 
       <section className="max-w-6xl mx-auto px-4 pb-14 grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(270px,0.75fr)]">
-        <TaskForm {...content} />
+        <TaskForm {...content} lang={lang} />
 
         <aside className="surface-card h-fit p-6">
           <p className="eyebrow">
@@ -987,14 +1069,39 @@ function ServiceHeading({ service, eyebrow, lang }) {
   );
 }
 
+const TASK_FORM_COPY = {
+  en: {
+    payNow: "Proceed to pay",
+    paid: "Paid",
+    receipt: "Payment ID",
+  },
+  hi: {
+    payNow: "भुगतान करने के लिए आगे बढ़ें",
+    paid: "भुगतान हो गया",
+    receipt: "भुगतान आईडी",
+  },
+};
+
 function TaskForm({
   title,
   description,
   fields,
   button,
   result,
+  paidResult,
+  payment,
+  lang = "en",
 }) {
+  // Non-paid services keep the original single-step "submit -> done" flow.
+  // Paid services (payment is set) add a review step showing the amount
+  // due, then a mock Razorpay-style checkout before the request is
+  // actually considered submitted.
+  const [reviewed, setReviewed] = useState(false);
   const [complete, setComplete] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [receipt, setReceipt] = useState(null);
+
+  const copy = TASK_FORM_COPY[lang] || TASK_FORM_COPY.en;
 
   return (
     <div className="surface-card p-5 sm:p-7">
@@ -1006,67 +1113,125 @@ function TaskForm({
         {description}
       </p>
 
-      <form
-        className="mt-7 grid gap-5"
-        onSubmit={(event) => {
-          event.preventDefault();
-          setComplete(true);
-        }}
-      >
-        {fields.map((field) => (
-          <label
-            key={field.label}
-            className="grid gap-1.5 text-sm font-medium text-navy-950"
-          >
-            {field.label}
-
-            {field.type === "select" ? (
-              <select
-                className="form-input"
-                required={field.required}
-                defaultValue=""
-              >
-                <option
-                  value=""
-                  disabled
-                >
-                  {field.options[0]}
-                </option>
-
-                {field.options
-                  .slice(1)
-                  .map((option) => (
-                    <option key={option}>
-                      {option}
-                    </option>
-                  ))}
-              </select>
-            ) : (
-              <input
-                className="form-input"
-                type={field.type || "text"}
-                placeholder={field.placeholder}
-                required={field.required}
-              />
-            )}
-          </label>
-        ))}
-
-        <button
-          className="button-primary inline-flex w-full sm:w-fit focus-ring"
-          type="submit"
+      {!complete && !(payment && reviewed) && (
+        <form
+          className="mt-7 grid gap-5"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (payment) {
+              setReviewed(true);
+            } else {
+              setComplete(true);
+            }
+          }}
         >
-          {button}
-        </button>
-      </form>
+          {fields.map((field) => (
+            <label
+              key={field.label}
+              className="grid gap-1.5 text-sm font-medium text-navy-950"
+            >
+              {field.label}
+
+              {field.type === "select" ? (
+                <select
+                  className="form-input"
+                  required={field.required}
+                  defaultValue=""
+                >
+                  <option
+                    value=""
+                    disabled
+                  >
+                    {field.options[0]}
+                  </option>
+
+                  {field.options
+                    .slice(1)
+                    .map((option) => (
+                      <option key={option}>
+                        {option}
+                      </option>
+                    ))}
+                </select>
+              ) : (
+                <input
+                  className="form-input"
+                  type={field.type || "text"}
+                  placeholder={field.placeholder}
+                  required={field.required}
+                />
+              )}
+            </label>
+          ))}
+
+          <button
+            className="button-primary inline-flex w-full sm:w-fit focus-ring"
+            type="submit"
+          >
+            {button}
+          </button>
+        </form>
+      )}
+
+      {payment && reviewed && !complete && (
+        <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm leading-relaxed text-amber-900">
+          <p>{result}</p>
+
+          <div className="mt-3 flex items-center justify-between rounded-lg bg-white/70 px-3 py-2 text-navy-950">
+            <span className="text-xs font-medium text-slate-600">
+              {payment.purpose}
+            </span>
+            <span className="font-semibold">
+              {formatRupees(payment.amount + payment.feeAmount)}
+            </span>
+          </div>
+
+          <button
+            className="button-primary mt-4 inline-flex w-full sm:w-fit focus-ring"
+            onClick={() => setCheckoutOpen(true)}
+            type="button"
+          >
+            {copy.payNow} · {formatRupees(payment.amount + payment.feeAmount)}
+          </button>
+        </div>
+      )}
 
       {complete && (
         <div
           className="mt-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-relaxed text-green-800"
           role="status"
         >
-          {result}
+          <p>{payment ? paidResult || result : result}</p>
+
+          {payment && receipt && (
+            <div className="mt-3 flex items-center justify-between rounded-lg bg-white/70 px-3 py-2 text-navy-950">
+              <span className="text-xs font-medium text-slate-600">
+                {copy.receipt}: <span className="font-mono">{receipt.id}</span>
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                ✓ {copy.paid}
+              </span>
+            </div>
+          )}
         </div>
+      )}
+
+      {payment && (
+        <MockCheckout
+          open={checkoutOpen}
+          lang={lang}
+          merchantName={lang === "hi" ? "परिवहन सेवा (डेमो)" : "Parivahan Sewa (Demo)"}
+          purpose={payment.purpose}
+          referenceLabel={payment.reference}
+          amount={payment.amount}
+          feeAmount={payment.feeAmount}
+          onClose={() => setCheckoutOpen(false)}
+          onSuccess={(newReceipt) => {
+            setReceipt(newReceipt);
+            setCheckoutOpen(false);
+            setComplete(true);
+          }}
+        />
       )}
     </div>
   );
@@ -1077,18 +1242,21 @@ function NationalPermitAuthorization({
   lang,
 }) {
   const [query, setQuery] = useState("");
+  const [activeAction, setActiveAction] = useState(null); // null | "track" | "print"
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [paymentReceipt, setPaymentReceipt] = useState(null);
 
   const copy = NATIONAL_PERMIT_COPY[lang];
+  const taskCopy = TASK_FORM_COPY[lang] || TASK_FORM_COPY.en;
 
   const visibleStates = useMemo(
     () =>
-      NATIONAL_PERMIT_STATES.filter(
-        ({ state }) =>
-          state
-            .toLowerCase()
-            .includes(query.toLowerCase())
+      NATIONAL_PERMIT_STATES.filter(({ state }) =>
+        state[lang]
+          .toLowerCase()
+          .includes(query.toLowerCase())
       ),
-    [query]
+    [query, lang]
   );
 
   const leadingStates = useMemo(
@@ -1098,6 +1266,15 @@ function NationalPermitAuthorization({
         .slice(0, 4),
     []
   );
+
+  function handleActionClick(index) {
+    if (index === 0) {
+      setCheckoutOpen(true);
+      return;
+    }
+    const key = index === 1 ? "track" : "print";
+    setActiveAction((current) => (current === key ? null : key));
+  }
 
   return (
     <div className="online-page pb-14">
@@ -1151,10 +1328,10 @@ function NationalPermitAuthorization({
           {leadingStates.map((item) => (
             <div
               className="surface-card p-5"
-              key={item.state}
+              key={item.state.en}
             >
               <p className="text-xs font-bold tracking-wide text-slate-500">
-                {item.state}
+                {item.state[lang]}
               </p>
 
               <p className="mt-3 text-2xl font-semibold text-navy-950">
@@ -1210,8 +1387,8 @@ function NationalPermitAuthorization({
 
               <tbody>
                 {visibleStates.map((item) => (
-                  <tr key={item.state}>
-                    <td>{item.state}</td>
+                  <tr key={item.state.en}>
+                    <td>{item.state[lang]}</td>
                     <td>
                       {formatNumber(item.permits)}
                     </td>
@@ -1242,10 +1419,17 @@ function NationalPermitAuthorization({
           </p>
 
           <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {copy.actions.map(([title, detail]) => (
-              <div
-                className="surface-card p-5"
+            {copy.actions.map(([title, detail], index) => (
+              <button
+                type="button"
                 key={title}
+                onClick={() => handleActionClick(index)}
+                className={`surface-card p-5 text-left transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md focus-ring ${
+                  (index === 1 && activeAction === "track") ||
+                  (index === 2 && activeAction === "print")
+                    ? "border-blue-300 ring-2 ring-blue-100"
+                    : ""
+                }`}
               >
                 <span
                   className="online-action-icon"
@@ -1261,15 +1445,63 @@ function NationalPermitAuthorization({
                 <p className="mt-1 text-sm leading-relaxed text-slate-500">
                   {detail}
                 </p>
-              </div>
+              </button>
             ))}
           </div>
+
+          {paymentReceipt && (
+            <div
+              className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-relaxed text-green-800"
+              role="status"
+            >
+              <p>{copy.payment.successDetail}</p>
+
+              <div className="mt-3 flex items-center justify-between rounded-lg bg-white/70 px-3 py-2 text-navy-950">
+                <span className="text-xs font-medium text-slate-600">
+                  {taskCopy.receipt}:{" "}
+                  <span className="font-mono">{paymentReceipt.id}</span>
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                  ✓ {taskCopy.paid}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {activeAction === "track" && (
+            <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-relaxed text-navy-950">
+              <p className="font-semibold">{copy.track.title}</p>
+              <p className="mt-1 text-slate-600">{copy.track.detail}</p>
+            </div>
+          )}
+
+          {activeAction === "print" && (
+            <div className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm leading-relaxed text-navy-950">
+              <p className="font-semibold">{copy.print.title}</p>
+              <p className="mt-1 text-slate-600">{copy.print.detail}</p>
+            </div>
+          )}
         </section>
 
         <p className="mt-8 text-xs text-slate-500">
           {copy.notice}
         </p>
       </section>
+
+      <MockCheckout
+        open={checkoutOpen}
+        lang={lang}
+        merchantName={lang === "hi" ? "परिवहन सेवा (डेमो)" : "Parivahan Sewa (Demo)"}
+        purpose={copy.payment.purpose}
+        referenceLabel={copy.payment.reference}
+        amount={NATIONAL_PERMIT_PAYMENT_AMOUNT.amount}
+        feeAmount={NATIONAL_PERMIT_PAYMENT_AMOUNT.feeAmount}
+        onClose={() => setCheckoutOpen(false)}
+        onSuccess={(receipt) => {
+          setPaymentReceipt(receipt);
+          setCheckoutOpen(false);
+        }}
+      />
     </div>
   );
 }
