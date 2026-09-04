@@ -10,35 +10,37 @@ export default function Navbar() {
   const [openKey, setOpenKey] = useState(null);
 
   useEffect(() => {
-    api.get("/services/menu").then((res) => setMenu(res.data)).catch(() => {});
+    api
+      .get("/services/menu")
+      .then((res) => setMenu(res.data))
+      .catch(() => {});
   }, []);
 
-  const lang = i18n.language === "hi" ? "hi" : "en";
+  const lang = i18n.language;
 
   function goToService(section, slug) {
     setOpenKey(null);
+
     if (section === "drivingLicense") {
       navigate(`/driving-license/${slug}`);
     } else if (section === "registration") {
       navigate(`/vehicle-registration/${slug}`);
     } else if (section === "onlineServices") {
-      navigate(slug === "vehicle-related-services" ? "/online-services" : `/online-services/${slug}`);
+      navigate(
+        slug === "vehicle-related-services"
+          ? "/online-services"
+          : `/online-services/${slug}`
+      );
     } else {
       navigate(`/service/${slug}`);
     }
   }
 
-  const sections = menu
-    ? [
-        { key: "drivingLicense", label: t("nav.drivingLicense"), data: menu.drivingLicense },
-        { key: "registration", label: t("nav.registration"), data: menu.registration },
-        { key: "onlineServices", label: t("nav.onlineServices"), data: menu.onlineServices },
-      ].filter((section) => section.data)
-    : [];
-
   return (
     <nav className="bg-navy-900 text-white relative z-30">
       <div className="max-w-7xl mx-auto px-4 flex items-center gap-1">
+
+        {/* HOME */}
         <Link
           to="/"
           className="px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
@@ -46,49 +48,68 @@ export default function Navbar() {
           {t("nav.home")}
         </Link>
 
-        <Link
-          to="/driving-license"
-          className="px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
+        {/* DRIVING LICENCE */}
+        <div
+          className="relative"
+          onMouseEnter={() => setOpenKey("drivingLicense")}
+          onMouseLeave={() => setOpenKey(null)}
         >
-          {t("nav.drivingLicense")}
-        </Link>
-
-        <Link
-          to="/online-services"
-          className="px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
-        >
-          {t("nav.vehicleServices")}
-        </Link>
-
-        {sections.map((s) => (
-          <div
-            key={s.key}
-            className="relative"
-            onMouseEnter={() => setOpenKey(s.key)}
-            onMouseLeave={() => setOpenKey(null)}
+          <Link
+            to="/driving-license"
+            className="block px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
           >
-            <button
-              className="px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
-              onClick={() => setOpenKey(openKey === s.key ? null : s.key)}
-            >
-              {s.label}
-            </button>
+            {t("nav.drivingLicense")}
+          </Link>
 
-            {openKey === s.key && (
+          {openKey === "drivingLicense" &&
+            menu?.drivingLicense && (
               <div className="absolute left-0 top-full bg-white text-navy-950 shadow-xl rounded-b-md min-w-[280px] py-2 border border-slate-200">
-                {s.data.items.map((item) => (
+                {menu.drivingLicense.items.map((item) => (
                   <button
                     key={item.slug}
-                    onClick={() => goToService(s.key, item.slug)}
+                    onClick={() =>
+                      goToService("drivingLicense", item.slug)
+                    }
                     className="block w-full text-left px-4 py-2 text-sm hover:bg-slate-100 focus-ring"
                   >
-                    {item[lang]}
+                    {item[lang] || item.en}
                   </button>
                 ))}
               </div>
             )}
-          </div>
-        ))}
+        </div>
+
+        {/* VEHICLE SERVICES */}
+        <div
+          className="relative"
+          onMouseEnter={() => setOpenKey("onlineServices")}
+          onMouseLeave={() => setOpenKey(null)}
+        >
+          <Link
+            to="/online-services"
+            className="block px-4 py-3 text-sm font-medium hover:bg-navy-800 focus-ring"
+          >
+            {t("nav.vehicleServices")}
+          </Link>
+
+          {openKey === "onlineServices" &&
+            menu?.onlineServices && (
+              <div className="absolute left-0 top-full bg-white text-navy-950 shadow-xl rounded-b-md min-w-[280px] py-2 border border-slate-200">
+                {menu.onlineServices.items.map((item) => (
+                  <button
+                    key={item.slug}
+                    onClick={() =>
+                      goToService("onlineServices", item.slug)
+                    }
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-slate-100 focus-ring"
+                  >
+                    {item[lang] || item.en}
+                  </button>
+                ))}
+              </div>
+            )}
+        </div>
+
       </div>
     </nav>
   );

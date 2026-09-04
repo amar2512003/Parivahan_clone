@@ -52,7 +52,7 @@ const COPY = {
     clearSearch: "Clear search",
     yourLocation: "Your location",
     footerNotice:
-      "Demo locator: office locations, addresses and phone numbers are seeded sample data for this prototype. Confirm details with the relevant State Transport Department before visiting.",
+      "Confirm details with the relevant State Transport Department before visiting.",
   },
 
   hi: {
