@@ -4,16 +4,17 @@
 //
 // Karnataka, West Bengal, Maharashtra, Uttar Pradesh, Andhra Pradesh,
 // Arunachal Pradesh, Assam, Bihar, Chhattisgarh, Goa, Gujarat, Jammu &
-// Kashmir, Jharkhand, Himachal Pradesh, Kerala, Madhya Pradesh, Manipur,
-// Punjab, and Rajasthan are special cases: instead of a generic 2-office
-// placeholder, they're
-// seeded with real RTO jurisdictions (codes, localities, and addresses
-// sourced from official Transport Dept. listings / multiple corroborating
-// public reference sources) for fuller coverage. Himachal Pradesh is the one
-// partial exception — its ~90+ code scheme (district HQs, sub-divisional
-// offices, tourist/government series) is large and inconsistently
-// documented across sources, so it's seeded with just the state's 12 main
-// district-headquarters RTOs rather than an attempt at the full table.
+// Kashmir, Jharkhand, Himachal Pradesh, Kerala, Madhya Pradesh, Meghalaya,
+// Manipur, Mizoram, Nagaland, Odisha, Punjab, Rajasthan, Uttarakhand,
+// Telangana, and Tamil Nadu are special cases: instead of a generic
+// 2-office placeholder, they're seeded with real RTO jurisdictions (codes,
+// localities, and addresses sourced from official Transport Dept.
+// listings / multiple corroborating public reference sources) for fuller
+// coverage. Himachal Pradesh is the one partial exception — its ~90+ code
+// scheme (district HQs, sub-divisional offices, tourist/government
+// series) is large and inconsistently documented across sources, so it's
+// seeded with just the state's 12 main district-headquarters RTOs rather
+// than an attempt at the full table.
 // Phone numbers everywhere in this file — including for these detailed
 // states — stay in the same fictitious "1800 121 xxxx" demo format used
 // across the rest of the site, rather than mixing in real published
@@ -21,15 +22,8 @@
 // app.
 const STATE_RTO_SEEDS = [
   ["HR", "Haryana", "Gurugram", [28.4595, 77.0266], "Faridabad", [28.4089, 77.3178]],
-  ["MZ", "Mizoram", "Aizawl", [23.7271, 92.7176], "Lunglei", [22.8864, 92.7425]],
-  ["ML", "Meghalaya", "Shillong", [25.5788, 91.8933], "Tura", [25.514, 90.2024]],
-  ["NL", "Nagaland", "Kohima", [25.6751, 94.1086], "Dimapur", [25.904, 93.7266]],
-  ["OD", "Odisha", "Bhubaneswar", [20.2961, 85.8245], "Cuttack", [20.4625, 85.883]],
   ["SK", "Sikkim", "Gangtok", [27.3389, 88.6065], "Namchi", [27.1664, 88.3638]],
-  ["TN", "Tamil Nadu", "Chennai Central", [13.0827, 80.2707], "Coimbatore", [11.0168, 76.9558]],
-  ["TS", "Telangana", "Hyderabad Central", [17.385, 78.4867], "Warangal", [17.9689, 79.5941]],
   ["TR", "Tripura", "Agartala", [23.8315, 91.2868], "Udaipur", [23.5333, 91.4833]],
-  ["UK", "Uttarakhand", "Dehradun", [30.3165, 78.0322], "Haldwani", [29.2183, 79.513]],
 ];
 
 function makeOffice(code, state, city, coordinates, sequence) {
@@ -580,6 +574,98 @@ const ANDHRA_PRADESH_RTO_SEEDS = [
   { code: "AP-37", city: "Eluru", coordinates: [16.7107, 81.0952] },
 ];
 
+// Mizoram has 9 RTO/DTO codes, one per district plus a separate "Aizawl
+// Rural" office (MZ-09) covering the areas surrounding the capital rather
+// than the city itself. District/code pairing is corroborated across
+// three independent, mutually-agreeing listings, including per-office
+// detail pages that confirm the individual addresses for Aizawl, Lunglei,
+// Saiha, and Lawngtlai. Coordinates are district-headquarters town
+// centres rather than verified building addresses, same caveat as the
+// other states in this file; Aizawl Rural's coordinate is a rough
+// approximation just outside Aizawl city itself, since it isn't a single
+// town with its own centre.
+const MIZORAM_RTO_SEEDS = [
+  { code: "MZ-01", city: "Aizawl", coordinates: [23.7271, 92.7176] },
+  { code: "MZ-02", city: "Lunglei", coordinates: [22.8864, 92.7425] },
+  { code: "MZ-03", city: "Saiha", coordinates: [22.4931, 92.9756] },
+  { code: "MZ-04", city: "Champhai", coordinates: [23.4667, 93.3333] },
+  { code: "MZ-05", city: "Kolasib", coordinates: [24.2332, 92.6767] },
+  { code: "MZ-06", city: "Serchhip", coordinates: [23.3333, 92.85] },
+  { code: "MZ-07", city: "Lawngtlai", coordinates: [22.5333, 92.9167] },
+  { code: "MZ-08", city: "Mamit", coordinates: [23.9333, 92.4833] },
+  { code: "MZ-09", city: "Aizawl Rural", coordinates: [23.68, 92.65] },
+];
+
+// Nagaland has 8 district RTO offices (NL-01 through NL-08); two further
+// codes, NL-10 and NL-11, are reserved for government non-transport and
+// government transport vehicles respectively rather than being
+// public-facing district offices, so — matching how Chhattisgarh's and
+// Madhya Pradesh's reserved codes are omitted elsewhere in this file —
+// they're left out here. District/code pairing is corroborated across
+// four independent, mutually-agreeing listings (one single outlier
+// listing orders the codes differently and is treated as the error,
+// since every other source agrees on this sequence). Coordinates are
+// district-headquarters town centres rather than verified building
+// addresses, same caveat as the other states in this file.
+const NAGALAND_RTO_SEEDS = [
+  { code: "NL-01", city: "Kohima", coordinates: [25.6751, 94.1086] },
+  { code: "NL-02", city: "Mokokchung", coordinates: [26.325, 94.5119] },
+  { code: "NL-03", city: "Tuensang", coordinates: [26.2743, 94.8256] },
+  { code: "NL-04", city: "Mon", coordinates: [26.7411, 95.0578] },
+  { code: "NL-05", city: "Wokha", coordinates: [26.0997, 94.2647] },
+  { code: "NL-06", city: "Zunheboto", coordinates: [26.0084, 94.5233] },
+  { code: "NL-07", city: "Dimapur", coordinates: [25.904, 93.7266] },
+  { code: "NL-08", city: "Phek", coordinates: [25.6656, 94.4761] },
+];
+
+// Odisha has 35 district-level RTO offices, officially numbered OD-01
+// through OD-35 by the state Transport Dept. (odishatransport.gov.in),
+// which also confirms the split of Bhubaneswar into two zones (OD-02 and
+// OD-33) and Sundargarh district into two offices — the district HQ
+// (OD-16) and the separate industrial-town office at Rourkela (OD-14).
+// The full code table is corroborated across two independently-agreeing
+// public listings, cross-checked against the department's own printed
+// area-code map for the lower-numbered codes (OD-01 through OD-09).
+// Coordinates are town/city centres rather than verified building
+// addresses, same caveat as the other large states in this file.
+const ODISHA_RTO_SEEDS = [
+  { code: "OD-01", city: "Balasore", coordinates: [21.4942, 86.9316] },
+  { code: "OD-02", city: "Bhubaneswar (I)", coordinates: [20.2961, 85.8245] },
+  { code: "OD-03", city: "Bolangir", coordinates: [20.7074, 83.4835] },
+  { code: "OD-04", city: "Chandikhole", coordinates: [20.7833, 86.05] },
+  { code: "OD-05", city: "Cuttack", coordinates: [20.4625, 85.883] },
+  { code: "OD-06", city: "Dhenkanal", coordinates: [20.6586, 85.5981] },
+  { code: "OD-07", city: "Ganjam (Chhatrapur)", coordinates: [19.35, 84.98] },
+  { code: "OD-08", city: "Kalahandi (Bhawanipatna)", coordinates: [19.9064, 83.1653] },
+  { code: "OD-09", city: "Keonjhar", coordinates: [21.6297, 85.5817] },
+  { code: "OD-10", city: "Koraput", coordinates: [18.8123, 82.7108] },
+  { code: "OD-11", city: "Mayurbhanj (Baripada)", coordinates: [21.9347, 86.7286] },
+  { code: "OD-12", city: "Phulbani (Kandhamal)", coordinates: [20.4667, 84.2333] },
+  { code: "OD-13", city: "Puri", coordinates: [19.8135, 85.8312] },
+  { code: "OD-14", city: "Rourkela", coordinates: [22.2604, 84.8536] },
+  { code: "OD-15", city: "Sambalpur", coordinates: [21.4669, 83.9756] },
+  { code: "OD-16", city: "Sundargarh", coordinates: [22.1167, 84.0333] },
+  { code: "OD-17", city: "Bargarh", coordinates: [21.3347, 83.6197] },
+  { code: "OD-18", city: "Rayagada", coordinates: [19.1719, 83.4159] },
+  { code: "OD-19", city: "Angul", coordinates: [20.8397, 85.1017] },
+  { code: "OD-20", city: "Gajapati (Paralakhemundi)", coordinates: [18.7833, 84.0833] },
+  { code: "OD-21", city: "Jagatsinghpur", coordinates: [20.2549, 86.1706] },
+  { code: "OD-22", city: "Bhadrak", coordinates: [21.0574, 86.5155] },
+  { code: "OD-23", city: "Jharsuguda", coordinates: [21.8554, 84.0062] },
+  { code: "OD-24", city: "Nabarangpur", coordinates: [19.2333, 82.55] },
+  { code: "OD-25", city: "Nayagarh", coordinates: [20.1289, 85.0975] },
+  { code: "OD-26", city: "Nuapada", coordinates: [20.8064, 82.5453] },
+  { code: "OD-27", city: "Boudh", coordinates: [20.8333, 84.3333] },
+  { code: "OD-28", city: "Debagarh (Deogarh)", coordinates: [21.5333, 84.7333] },
+  { code: "OD-29", city: "Kendrapara", coordinates: [20.5, 86.4167] },
+  { code: "OD-30", city: "Malkangiri", coordinates: [18.3667, 81.9] },
+  { code: "OD-31", city: "Sonepur (Subarnapur)", coordinates: [20.8333, 83.9167] },
+  { code: "OD-32", city: "Bhanjanagar", coordinates: [19.9167, 84.6] },
+  { code: "OD-33", city: "Bhubaneswar (II)", coordinates: [20.3, 85.85] },
+  { code: "OD-34", city: "Jajpur", coordinates: [20.85, 86.3333] },
+  { code: "OD-35", city: "Talcher", coordinates: [20.95, 85.2167] },
+];
+
 // Uttar Pradesh has 75 active RTO codes (UP-11 through UP-96, with a
 // handful of numbers — 18, 28, 29, 39, 48, 49, 59, 68, 69, 88, 89 — never
 // allocated to a district). Codes UP-1 through UP-10 are defunct; those
@@ -962,6 +1048,39 @@ const MADHYA_PRADESH_RTO_SEEDS = [
   { code: "MP-74", city: "Chachaura", coordinates: [24.1667, 77.15] },
 ];
 
+// Meghalaya's RTO code table has a genuine three-way source conflict for
+// codes ML-04 through ML-10. One widely syndicated blog table (appearing,
+// word-for-word, on two different insurer domains — so really a single
+// source republished twice) assigns ML-02 Jowai, ML-03 Nongstoin, ML-05
+// Williamnagar, ML-06 Baghmara, ML-07 Resubelpara, ML-08 Khliehriat, ML-09
+// Mairang, ML-10 Ampati. That directly conflicts with three independent
+// sources used here instead: two aggregator listings that agree with each
+// other (ML-04 Jaintia Hills, ML-06 West Khasi Hills, ML-07 East Garo
+// Hills, ML-08 West Garo Hills, ML-09 South Garo Hills, ML-10 Ri-Bhoi/
+// Nongpoh), corroborated by individual per-office "verified RTO" detail
+// pages confirming ML-01, ML-02, ML-03 and ML-05 are all separate offices
+// physically seated in Shillong itself (East Khasi Hills) rather than at
+// Jowai/Nongstoin/Williamnagar as the single syndicated table claims. The
+// three-source, address-verified version is used below; ML-02, ML-03 are
+// additional Shillong-area offices without a more specific published
+// locality breakdown, so they're listed at the Shillong coordinate. Newer
+// districts carved out since (South West Khasi Hills, East Jaintia Hills,
+// North Garo Hills, South West Garo Hills) don't yet have their own codes
+// in any of the sources checked, matching the lag seen for newly split
+// districts in other states in this file.
+const MEGHALAYA_RTO_SEEDS = [
+  { code: "ML-01", city: "Shillong", note: "East Khasi Hills district — Sadar office", coordinates: [25.5788, 91.8933] },
+  { code: "ML-02", city: "Shillong", note: "East Khasi Hills district — additional office", coordinates: [25.5788, 91.8933] },
+  { code: "ML-03", city: "Shillong", note: "East Khasi Hills district — additional office", coordinates: [25.5788, 91.8933] },
+  { code: "ML-04", city: "Jowai", note: "Jaintia Hills district", coordinates: [25.4333, 92.2] },
+  { code: "ML-05", city: "Shillong", note: "East Khasi Hills district — additional office", coordinates: [25.5788, 91.8933] },
+  { code: "ML-06", city: "Nongstoin", note: "West Khasi Hills district", coordinates: [25.5167, 91.2667] },
+  { code: "ML-07", city: "Williamnagar", note: "East Garo Hills district", coordinates: [25.4833, 90.6167] },
+  { code: "ML-08", city: "Tura", note: "West Garo Hills district", coordinates: [25.514, 90.2024] },
+  { code: "ML-09", city: "Baghmara", note: "South Garo Hills district", coordinates: [25.1667, 90.6333] },
+  { code: "ML-10", city: "Nongpoh", note: "Ri-Bhoi district", coordinates: [25.9167, 91.8833] },
+];
+
 // Manipur has 7 long-established RTO codes (MN-01 through MN-07), one per
 // district, corroborated across many independent listings — though one
 // listing's ordering (Imphal East as MN02) conflicts with the majority and
@@ -1052,6 +1171,201 @@ const RAJASTHAN_RTO_SEEDS = [
   { code: "RJ-25", city: "Sawai Madhopur", coordinates: [26.0173, 76.3489] },
   { code: "RJ-26", city: "Tonk", coordinates: [26.1651, 75.7936] },
   { code: "RJ-27", city: "Udaipur", coordinates: [24.5854, 73.7125] },
+];
+
+// Uttarakhand: the state's official Transport Dept. site (transport.uk.gov.in)
+// confirms the core mapping used here — UK-01 Almora, UK-04 Nainital (seated
+// at Haldwani), UK-07 Dehradun, UK-12 Pauri — and several independent
+// third-party listings agree on the full UK-01 to UK-20 table built from
+// that base. The state has 13 districts; the extra codes beyond UK-13
+// (UK-14 through UK-20) are sub-divisional RTO/ARTO offices — Rishikesh,
+// Kotdwar, Vikasnagar, Roorkee, Kashipur, Ramnagar, and an ARTO at
+// Ranikhet — that sit inside a parent district rather than being separate
+// districts themselves, noted via each entry's `note` field. The old "UA"
+// prefix was retired in favour of "UK" from 1 January 2007. Coordinates
+// are town centres rather than verified building addresses.
+const UTTARAKHAND_RTO_SEEDS = [
+  { code: "UK-01", city: "Almora", note: "Almora district", coordinates: [29.5892, 79.6467] },
+  { code: "UK-02", city: "Bageshwar", note: "Bageshwar district", coordinates: [29.8406, 79.7691] },
+  { code: "UK-03", city: "Champawat", note: "Champawat district", coordinates: [29.3352, 80.0961] },
+  { code: "UK-04", city: "Haldwani", note: "Nainital district", coordinates: [29.2183, 79.513] },
+  { code: "UK-05", city: "Pithoragarh", note: "Pithoragarh district", coordinates: [29.5829, 80.2181] },
+  { code: "UK-06", city: "Rudrapur", note: "Udham Singh Nagar district", coordinates: [28.9875, 79.4159] },
+  { code: "UK-07", city: "Dehradun", note: "Dehradun district", coordinates: [30.3165, 78.0322] },
+  { code: "UK-08", city: "Haridwar", note: "Haridwar district", coordinates: [29.9457, 78.1642] },
+  { code: "UK-09", city: "New Tehri", note: "Tehri Garhwal district", coordinates: [30.3778, 78.4804] },
+  { code: "UK-10", city: "Uttarkashi", note: "Uttarkashi district", coordinates: [30.7268, 78.4354] },
+  { code: "UK-11", city: "Gopeshwar", note: "Chamoli district", coordinates: [30.3877, 79.3389] },
+  { code: "UK-12", city: "Pauri", note: "Pauri Garhwal district", coordinates: [30.1462, 78.7773] },
+  { code: "UK-13", city: "Rudraprayag", note: "Rudraprayag district", coordinates: [30.2849, 78.9814] },
+  { code: "UK-14", city: "Rishikesh", note: "sub-office, Dehradun district", coordinates: [30.0869, 78.2676] },
+  { code: "UK-15", city: "Kotdwar", note: "sub-office, Pauri Garhwal district", coordinates: [29.7457, 78.5205] },
+  { code: "UK-16", city: "Vikasnagar", note: "sub-office, Dehradun district", coordinates: [30.4693, 77.7728] },
+  { code: "UK-17", city: "Roorkee", note: "sub-office, Haridwar district", coordinates: [29.8543, 77.888] },
+  { code: "UK-18", city: "Kashipur", note: "sub-office, Udham Singh Nagar district", coordinates: [29.2141, 78.9622] },
+  { code: "UK-19", city: "Ramnagar", note: "sub-office, Nainital district", coordinates: [29.3956, 79.1288] },
+  { code: "UK-20", city: "Ranikhet", note: "ARTO, Almora district", coordinates: [29.6425, 79.4319] },
+];
+
+// Telangana had 37-38 codes in active district-level use as of the most
+// recent corroborating listings (TS-01 through TS-33 agree across three
+// independent sources; TS-34 through TS-36 agree across two; TS-37 and
+// TS-38, for Mulugu and Narayanpet, appear in only one source each and are
+// the lowest-confidence entries here). TS-14 is a reserved/overflow series
+// for Hyderabad rather than a standalone district office and is omitted,
+// the same way other purely-reserved codes are omitted elsewhere in this
+// file. Worth flagging: Telangana's registration prefix has been
+// transitioning from "TS" to "TG" since 2025 per some sources — this
+// dataset keeps the long-established "TS" codes since that's what's on
+// the large existing fleet and what most listings still key off, but new
+// registrations may increasingly show "TG" instead. Coordinates are
+// district-headquarters town centres rather than verified building
+// addresses.
+const TELANGANA_RTO_SEEDS = [
+  { code: "TS-01", city: "Adilabad", coordinates: [19.6641, 78.532] },
+  { code: "TS-02", city: "Karimnagar", coordinates: [18.4386, 79.1288] },
+  { code: "TS-03", city: "Hanumakonda (Warangal Urban)", coordinates: [17.9689, 79.5941] },
+  { code: "TS-04", city: "Khammam", coordinates: [17.2473, 80.1514] },
+  { code: "TS-05", city: "Nalgonda", coordinates: [17.0575, 79.269] },
+  { code: "TS-06", city: "Mahbubnagar", coordinates: [16.7488, 77.9855] },
+  { code: "TS-07", city: "Shamshabad (Ranga Reddy)", coordinates: [17.2403, 78.4294] },
+  { code: "TS-08", city: "Medchal-Malkajgiri", coordinates: [17.6294, 78.4813] },
+  { code: "TS-09", city: "Hyderabad Central (Khairatabad)", coordinates: [17.4126, 78.4487] },
+  { code: "TS-10", city: "Hyderabad North", coordinates: [17.45, 78.47] },
+  { code: "TS-11", city: "Hyderabad East", coordinates: [17.38, 78.53] },
+  { code: "TS-12", city: "Hyderabad South", coordinates: [17.35, 78.47] },
+  { code: "TS-13", city: "Hyderabad West", coordinates: [17.4, 78.4] },
+  { code: "TS-15", city: "Sangareddy", coordinates: [17.6273, 78.0822] },
+  { code: "TS-16", city: "Nizamabad", coordinates: [18.6725, 78.0941] },
+  { code: "TS-17", city: "Kamareddy", coordinates: [18.3212, 78.3374] },
+  { code: "TS-18", city: "Nirmal", coordinates: [19.0968, 78.345] },
+  { code: "TS-19", city: "Mancherial", coordinates: [18.871, 79.4645] },
+  { code: "TS-20", city: "Kumaram Bheem Asifabad", coordinates: [19.3667, 79.2833] },
+  { code: "TS-21", city: "Jagtial", coordinates: [18.7942, 78.9161] },
+  { code: "TS-22", city: "Peddapalli", coordinates: [18.6151, 79.3742] },
+  { code: "TS-23", city: "Rajanna Sircilla", coordinates: [18.3936, 78.8298] },
+  { code: "TS-24", city: "Warangal (Rural)", coordinates: [17.9, 79.7] },
+  { code: "TS-25", city: "Jayashankar Bhupalpally", coordinates: [18.4321, 79.8814] },
+  { code: "TS-26", city: "Mahabubabad", coordinates: [17.6033, 80.0021] },
+  { code: "TS-27", city: "Jangaon", coordinates: [17.7286, 79.1554] },
+  { code: "TS-28", city: "Bhadradri Kothagudem", coordinates: [17.5563, 80.6197] },
+  { code: "TS-29", city: "Suryapet", coordinates: [17.14, 79.62] },
+  { code: "TS-30", city: "Yadadri Bhuvanagiri", coordinates: [17.5167, 79.15] },
+  { code: "TS-31", city: "Nagarkurnool", coordinates: [16.48, 78.32] },
+  { code: "TS-32", city: "Wanaparthy", coordinates: [16.3607, 78.0649] },
+  { code: "TS-33", city: "Jogulamba Gadwal", coordinates: [16.2311, 77.7956] },
+  { code: "TS-34", city: "Vikarabad", coordinates: [17.3378, 77.9048] },
+  { code: "TS-35", city: "Medak", coordinates: [18.046, 78.2696] },
+  { code: "TS-36", city: "Siddipet", coordinates: [18.1018, 78.8455] },
+  { code: "TS-37", city: "Mulugu", coordinates: [18.19, 80.0] },
+  { code: "TS-38", city: "Narayanpet", coordinates: [16.7442, 77.4956] },
+];
+
+// Tamil Nadu's code table is unusually large (well past 90 codes once
+// every taluk sub-office is counted) and different public listings
+// genuinely disagree with each other on plenty of the higher-numbered
+// codes. This seed list has two tiers of confidence: TN-01 through TN-14
+// (the Chennai metro cluster) are corroborated across three to four
+// independent sources that agree exactly on the code/office pairing. The
+// remaining entries — one flagship office per other major city/district —
+// come from a single internally-consistent Transport-Dept.-derived table,
+// with the individual code for each of Coimbatore (TN-37/38/66/99),
+// Madurai (TN-58/59/64), Salem (TN-29/30/54/90), Erode (TN-33/86), and
+// Tiruchirappalli (TN-45 West/TN-48 Srirangam/TN-81 East) additionally
+// cross-checked and confirmed against two or more independent sources.
+// Some codes that turned up with conflicting city assignments across
+// sources (e.g. TN-16, TN-17, TN-26, TN-27) are left out entirely rather
+// than guessed at. Suffixed variant codes (TN-15M, TN-39Z, TN-83M, and
+// similar enforcement/zonal sub-codes) are also omitted for the same
+// reason — this covers base codes only. Coordinates are town/locality
+// centres rather than verified building addresses.
+const TAMIL_NADU_RTO_SEEDS = [
+  { code: "TN-01", city: "Chennai Central (Ayanavaram)", coordinates: [13.0894, 80.2337] },
+  { code: "TN-02", city: "Chennai North West (Anna Nagar)", coordinates: [13.085, 80.2101] },
+  { code: "TN-03", city: "Chennai North East (Tondiarpet)", coordinates: [13.1067, 80.2847] },
+  { code: "TN-04", city: "Chennai East (Mylapore)", coordinates: [13.0339, 80.2619] },
+  { code: "TN-05", city: "Chennai North (Perambur)", coordinates: [13.1143, 80.2427] },
+  { code: "TN-06", city: "Chennai South East (Adyar)", coordinates: [13.0012, 80.2565] },
+  { code: "TN-07", city: "Chennai South (Velachery)", coordinates: [12.975, 80.22] },
+  { code: "TN-09", city: "Chennai West (Koyambedu)", coordinates: [13.0722, 80.1958] },
+  { code: "TN-10", city: "Chennai South West (Guindy)", coordinates: [13.01, 80.21] },
+  { code: "TN-11", city: "Tambaram", coordinates: [12.9249, 80.1] },
+  { code: "TN-12", city: "Poonamallee (Paruthipattu)", coordinates: [13.0475, 80.0947] },
+  { code: "TN-13", city: "Ambattur", coordinates: [13.1143, 80.1548] },
+  { code: "TN-14", city: "Sholinganallur", coordinates: [12.901, 80.2279] },
+  { code: "TN-15", city: "Ulundurpet", coordinates: [11.6167, 79.3333] },
+  { code: "TN-18", city: "Redhills", coordinates: [13.19, 80.183] },
+  { code: "TN-19", city: "Chengalpattu", coordinates: [12.6819, 79.9888] },
+  { code: "TN-20", city: "Thiruvallur", coordinates: [13.1439, 79.9094] },
+  { code: "TN-21", city: "Kanchipuram", coordinates: [12.8342, 79.7036] },
+  { code: "TN-22", city: "Meenambakkam", coordinates: [12.995, 80.1706] },
+  { code: "TN-23", city: "Vellore", coordinates: [12.9165, 79.1325] },
+  { code: "TN-24", city: "Krishnagiri", coordinates: [12.5186, 78.2137] },
+  { code: "TN-25", city: "Tiruvannamalai", coordinates: [12.2253, 79.0747] },
+  { code: "TN-28", city: "Namakkal (North)", coordinates: [11.2189, 78.1677] },
+  { code: "TN-29", city: "Dharmapuri", coordinates: [12.1211, 78.1582] },
+  { code: "TN-30", city: "Salem (West)", coordinates: [11.6643, 78.146] },
+  { code: "TN-31", city: "Cuddalore", coordinates: [11.748, 79.7714] },
+  { code: "TN-32", city: "Viluppuram", coordinates: [11.9401, 79.4861] },
+  { code: "TN-33", city: "Erode (East)", coordinates: [11.341, 77.7172] },
+  { code: "TN-34", city: "Tiruchengode", coordinates: [11.3817, 77.8944] },
+  { code: "TN-36", city: "Gobichettipalayam", coordinates: [11.4552, 77.4429] },
+  { code: "TN-37", city: "Coimbatore (South)", coordinates: [11.0016, 76.9668] },
+  { code: "TN-38", city: "Coimbatore (North)", coordinates: [11.0296, 76.9538] },
+  { code: "TN-39", city: "Tiruppur (North)", coordinates: [11.1085, 77.3411] },
+  { code: "TN-40", city: "Mettupalayam", coordinates: [11.2996, 76.9414] },
+  { code: "TN-41", city: "Pollachi", coordinates: [10.6588, 77.0083] },
+  { code: "TN-42", city: "Tiruppur (South)", coordinates: [11.085, 77.3411] },
+  { code: "TN-43", city: "Ooty (Nilgiris)", coordinates: [11.4102, 76.695] },
+  { code: "TN-45", city: "Tiruchirappalli (West)", coordinates: [10.8155, 78.6749] },
+  { code: "TN-46", city: "Perambalur", coordinates: [11.2342, 78.8807] },
+  { code: "TN-47", city: "Karur", coordinates: [10.9601, 78.0766] },
+  { code: "TN-48", city: "Srirangam", coordinates: [10.8624, 78.6928] },
+  { code: "TN-49", city: "Thanjavur", coordinates: [10.787, 79.1378] },
+  { code: "TN-50", city: "Tiruvarur", coordinates: [10.7661, 79.6494] },
+  { code: "TN-51", city: "Nagapattinam", coordinates: [10.7672, 79.8449] },
+  { code: "TN-52", city: "Sankagiri", coordinates: [11.475, 77.8778] },
+  { code: "TN-54", city: "Salem (East)", coordinates: [11.67, 78.16] },
+  { code: "TN-55", city: "Pudukkottai", coordinates: [10.3833, 78.8] },
+  { code: "TN-56", city: "Perundurai", coordinates: [11.2761, 77.5836] },
+  { code: "TN-57", city: "Dindigul", coordinates: [10.3673, 77.9803] },
+  { code: "TN-58", city: "Madurai (South)", coordinates: [9.91, 78.14] },
+  { code: "TN-59", city: "Madurai (North)", coordinates: [9.95, 78.13] },
+  { code: "TN-60", city: "Theni", coordinates: [10.0104, 77.4768] },
+  { code: "TN-61", city: "Ariyalur", coordinates: [11.1401, 79.0782] },
+  { code: "TN-63", city: "Sivaganga", coordinates: [9.8433, 78.4809] },
+  { code: "TN-64", city: "Madurai (Central)", coordinates: [9.9252, 78.1198] },
+  { code: "TN-65", city: "Ramanathapuram", coordinates: [9.3639, 78.8395] },
+  { code: "TN-66", city: "Coimbatore (Central)", coordinates: [11.0168, 76.9558] },
+  { code: "TN-67", city: "Virudhunagar", coordinates: [9.5851, 77.9581] },
+  { code: "TN-68", city: "Kumbakonam", coordinates: [10.9601, 79.3788] },
+  { code: "TN-69", city: "Tuticorin (Thoothukudi)", coordinates: [8.7642, 78.1348] },
+  { code: "TN-70", city: "Hosur", coordinates: [12.7409, 77.8253] },
+  { code: "TN-72", city: "Tirunelveli", coordinates: [8.7139, 77.7567] },
+  { code: "TN-73", city: "Ranipet", coordinates: [12.9247, 79.3308] },
+  { code: "TN-74", city: "Nagercoil", coordinates: [8.178, 77.4346] },
+  { code: "TN-75", city: "Marthandam", coordinates: [8.3057, 77.2058] },
+  { code: "TN-76", city: "Tenkasi", coordinates: [8.9598, 77.3152] },
+  { code: "TN-77", city: "Attur", coordinates: [11.594, 78.6009] },
+  { code: "TN-78", city: "Dharapuram", coordinates: [10.7358, 77.5306] },
+  { code: "TN-79", city: "Sankarankovil", coordinates: [9.1706, 77.5442] },
+  { code: "TN-81", city: "Tiruchirappalli (East)", coordinates: [10.8, 78.69] },
+  { code: "TN-82", city: "Mayiladuthurai", coordinates: [11.1039, 79.6549] },
+  { code: "TN-83", city: "Vaniyambadi", coordinates: [12.6833, 78.6167] },
+  { code: "TN-84", city: "Srivilliputtur", coordinates: [9.5119, 77.6339] },
+  { code: "TN-85", city: "Kundrathur", coordinates: [12.9784, 80.0644] },
+  { code: "TN-86", city: "Erode (West)", coordinates: [11.3428, 77.7089] },
+  { code: "TN-87", city: "Sriperumbudur", coordinates: [12.9675, 79.9436] },
+  { code: "TN-88", city: "Namakkal (South)", coordinates: [11.2189, 78.1677] },
+  { code: "TN-90", city: "Salem (South)", coordinates: [11.65, 78.17] },
+  { code: "TN-91", city: "Chidambaram", coordinates: [11.3993, 79.6905] },
+  { code: "TN-92", city: "Thiruchendur", coordinates: [8.4948, 78.1247] },
+  { code: "TN-93", city: "Mettur", coordinates: [11.7877, 77.8016] },
+  { code: "TN-94", city: "Palani", coordinates: [10.4499, 77.5182] },
+  { code: "TN-95", city: "Sivakasi", coordinates: [9.453, 77.7981] },
+  { code: "TN-96", city: "Kovilpatti", coordinates: [9.1717, 77.8686] },
+  { code: "TN-97", city: "Arani", coordinates: [12.6667, 79.2833] },
+  { code: "TN-99", city: "Coimbatore (West)", coordinates: [11.01, 76.92] },
 ];
 
 export const RTO_OFFICES = [
@@ -1221,6 +1535,16 @@ export const RTO_OFFICES = [
     phone: demoPhone(15000 + index),
     coordinates: office.coordinates,
   })),
+  ...MEGHALAYA_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "ML",
+    state: "Meghalaya",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city} — ${office.note}, Meghalaya`,
+    phone: demoPhone(16100 + index),
+    coordinates: office.coordinates,
+  })),
   ...MANIPUR_RTO_SEEDS.map((office, index) => ({
     id: office.code,
     stateCode: "MN",
@@ -1229,6 +1553,36 @@ export const RTO_OFFICES = [
     shortName: `RTO ${office.city} (${office.code})`,
     address: `Regional Transport Office, ${office.city}, Manipur`,
     phone: demoPhone(16000 + index),
+    coordinates: office.coordinates,
+  })),
+  ...MIZORAM_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "MZ",
+    state: "Mizoram",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city}, Mizoram`,
+    phone: demoPhone(16200 + index),
+    coordinates: office.coordinates,
+  })),
+  ...NAGALAND_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "NL",
+    state: "Nagaland",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city}, Nagaland`,
+    phone: demoPhone(16350 + index),
+    coordinates: office.coordinates,
+  })),
+  ...ODISHA_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "OD",
+    state: "Odisha",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city}, Odisha`,
+    phone: demoPhone(16500 + index),
     coordinates: office.coordinates,
   })),
   ...PUNJAB_RTO_SEEDS.map((office, index) => ({
@@ -1251,6 +1605,36 @@ export const RTO_OFFICES = [
     phone: demoPhone(18000 + index),
     coordinates: office.coordinates,
   })),
+  ...UTTARAKHAND_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "UK",
+    state: "Uttarakhand",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city} — ${office.note}, Uttarakhand`,
+    phone: demoPhone(19000 + index),
+    coordinates: office.coordinates,
+  })),
+  ...TELANGANA_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "TS",
+    state: "Telangana",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city}, Telangana`,
+    phone: demoPhone(20000 + index),
+    coordinates: office.coordinates,
+  })),
+  ...TAMIL_NADU_RTO_SEEDS.map((office, index) => ({
+    id: office.code,
+    stateCode: "TN",
+    state: "Tamil Nadu",
+    name: `Regional Transport Office, ${office.city}`,
+    shortName: `RTO ${office.city} (${office.code})`,
+    address: `Regional Transport Office, ${office.city}, Tamil Nadu`,
+    phone: demoPhone(21000 + index),
+    coordinates: office.coordinates,
+  })),
 ];
 
 export const RTO_STATES = [
@@ -1271,7 +1655,14 @@ export const RTO_STATES = [
   { code: "HP", name: "Himachal Pradesh" },
   { code: "KL", name: "Kerala" },
   { code: "MP", name: "Madhya Pradesh" },
+  { code: "ML", name: "Meghalaya" },
   { code: "MN", name: "Manipur" },
+  { code: "MZ", name: "Mizoram" },
+  { code: "NL", name: "Nagaland" },
+  { code: "OD", name: "Odisha" },
   { code: "PB", name: "Punjab" },
   { code: "RJ", name: "Rajasthan" },
+  { code: "UK", name: "Uttarakhand" },
+  { code: "TS", name: "Telangana" },
+  { code: "TN", name: "Tamil Nadu" },
 ].sort((a, b) => a.name.localeCompare(b.name));

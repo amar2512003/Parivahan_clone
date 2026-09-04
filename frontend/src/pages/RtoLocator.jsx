@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,18 +13,18 @@ const INDIA_CENTER = [22.5937, 78.9629];
 
 const COPY = {
   en: {
-    backToHome: "← Back to home",
     eyebrow: "RTO office locator",
     title: "Find an RTO office near you",
     description:
       "Choose a state to view its RTO offices, contact details and locations, or use your device location to identify the nearest seeded office.",
-    step1: "Step 1",
+    byState: "By state",
     chooseState: "Choose a state",
     chooseStateHint: "Select a state to narrow the map and office list.",
     stateLabel: "State / UT",
     allStates: "All states and regions",
     viewAll: "View all locators",
-    step2: "Step 2",
+    or: "OR",
+    byLocation: "By your location",
     nearestRto: "Nearest RTO",
     nearestHint: (stateName) =>
       `Share your location to find the closest office${stateName ? ` in ${stateName}` : ""}.`,
@@ -57,18 +56,18 @@ const COPY = {
   },
 
   hi: {
-    backToHome: "← होम पर वापस जाएं",
     eyebrow: "आरटीओ कार्यालय लोकेटर",
     title: "अपने पास का आरटीओ कार्यालय खोजें",
     description:
       "आरटीओ कार्यालय, संपर्क विवरण और स्थान देखने के लिए एक राज्य चुनें, या अपने डिवाइस की लोकेशन का उपयोग करके निकटतम कार्यालय पहचानें।",
-    step1: "चरण 1",
+    byState: "राज्य के अनुसार",
     chooseState: "राज्य चुनें",
     chooseStateHint: "मानचित्र और कार्यालय सूची को सीमित करने के लिए एक राज्य चुनें।",
     stateLabel: "राज्य / केंद्र शासित प्रदेश",
     allStates: "सभी राज्य और क्षेत्र",
     viewAll: "सभी लोकेटर देखें",
-    step2: "चरण 2",
+    or: "या",
+    byLocation: "आपकी लोकेशन के अनुसार",
     nearestRto: "निकटतम आरटीओ",
     nearestHint: (stateName) =>
       `निकटतम कार्यालय खोजने के लिए अपनी लोकेशन साझा करें${stateName ? ` — ${stateName} में` : ""}।`,
@@ -348,11 +347,8 @@ export default function RtoLocator() {
   return (
     <div className="min-h-[calc(100vh-12rem)] bg-slate-50">
       <section className="rto-hero text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <Link to="/" className="inline-flex text-sm text-blue-100 hover:text-white focus-ring rounded">
-            {copy.backToHome}
-          </Link>
-          <div className="mt-7 max-w-3xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          <div className="max-w-3xl">
             <p className="eyebrow eyebrow-light">{copy.eyebrow}</p>
             <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
               {copy.title}
@@ -372,7 +368,7 @@ export default function RtoLocator() {
                 <Building2 size={22} aria-hidden="true" />
               </span>
               <div>
-                <p className="eyebrow">{copy.step1}</p>
+                <p className="eyebrow">{copy.byState}</p>
                 <h2 className="mt-1 text-xl font-bold text-navy-950">{copy.chooseState}</h2>
                 <p className="mt-1 text-sm leading-relaxed text-slate-600">
                   {copy.chooseStateHint}
@@ -407,50 +403,52 @@ export default function RtoLocator() {
               </button>
             )}
 
-            <div className="mt-7 border-t border-slate-100 pt-6">
-              <div className="flex items-start gap-3">
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
-                  <LocateFixed size={21} aria-hidden="true" />
-                </span>
-                <div>
-                  <p className="eyebrow">{copy.step2}</p>
-                  <h2 className="mt-1 text-lg font-bold text-navy-950">{copy.nearestRto}</h2>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                    {copy.nearestHint(selectedStateName)}
-                  </p>
-                </div>
-              </div>
+            <div className="rto-divider" role="separator" aria-label={copy.or}>
+              <span className="rto-divider-badge">{copy.or}</span>
+            </div>
 
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-orange-700">
+                <LocateFixed size={21} aria-hidden="true" />
+              </span>
+              <div>
+                <p className="eyebrow">{copy.byLocation}</p>
+                <h2 className="mt-1 text-lg font-bold text-navy-950">{copy.nearestRto}</h2>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                  {copy.nearestHint(selectedStateName)}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={requestLocation}
+              disabled={locationStatus === "loading"}
+              className="button-primary mt-5 inline-flex w-full gap-2 focus-ring"
+            >
+              <Navigation size={16} aria-hidden="true" />
+              {locationStatus === "loading" ? copy.findingLocation : copy.useMyLocation}
+            </button>
+            {locationError && <p className="mt-3 text-sm text-red-700">{locationError}</p>}
+
+            {nearestOffice && (
               <button
                 type="button"
-                onClick={requestLocation}
-                disabled={locationStatus === "loading"}
-                className="button-primary mt-5 inline-flex w-full gap-2 focus-ring"
+                onClick={focusNearestOffice}
+                className="nearest-rto-card mt-5 w-full text-left focus-ring"
               >
-                <Navigation size={16} aria-hidden="true" />
-                {locationStatus === "loading" ? copy.findingLocation : copy.useMyLocation}
+                <span className="nearest-rto-label">{copy.nearestSeeded}</span>
+                <span className="mt-1 block font-bold text-navy-950">
+                  {localizeShortName(nearestOffice.office.shortName, lang)}
+                </span>
+                <span className="mt-1 block text-sm text-slate-600">
+                  {copy.kmAway(nearestOffice.distance.toFixed(1))}
+                </span>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-800">
+                  {copy.showOnMap} <span aria-hidden="true">→</span>
+                </span>
               </button>
-              {locationError && <p className="mt-3 text-sm text-red-700">{locationError}</p>}
-
-              {nearestOffice && (
-                <button
-                  type="button"
-                  onClick={focusNearestOffice}
-                  className="nearest-rto-card mt-5 w-full text-left focus-ring"
-                >
-                  <span className="nearest-rto-label">{copy.nearestSeeded}</span>
-                  <span className="mt-1 block font-bold text-navy-950">
-                    {localizeShortName(nearestOffice.office.shortName, lang)}
-                  </span>
-                  <span className="mt-1 block text-sm text-slate-600">
-                    {copy.kmAway(nearestOffice.distance.toFixed(1))}
-                  </span>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-800">
-                    {copy.showOnMap} <span aria-hidden="true">→</span>
-                  </span>
-                </button>
-              )}
-            </div>
+            )}
           </aside>
 
           <div className="surface-card overflow-hidden">

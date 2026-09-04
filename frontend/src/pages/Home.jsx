@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { MapPin } from "lucide-react";
 import TrafficAnimation from "../components/TrafficAnimation"; // adjust path if needed
 
 export default function Home() {
@@ -24,8 +25,9 @@ export default function Home() {
 
               <Link
                 to="/rto-locator"
-                className="inline-block bg-saffron px-6 py-3 rounded-md font-medium hover:opacity-90 transition focus-ring"
+                className="rto-cta focus-ring"
               >
+                <MapPin size={18} aria-hidden="true" />
                 {t("hero.cta")}
               </Link>
             </div>
