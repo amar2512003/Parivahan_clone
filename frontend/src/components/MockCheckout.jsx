@@ -8,7 +8,9 @@ import {
   X,
   Loader2,
   CheckCircle2,
+  RefreshCw,
 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 
 /* =========================================================
    COPY
@@ -27,6 +29,12 @@ const COPY = {
     upi: "UPI",
     card: "Card",
     netbanking: "Netbanking",
+    scanToPay: "Scan to pay",
+    qrExpiresIn: "QR expires in",
+    qrExpired: "QR code expired",
+    refreshQr: "Refresh QR",
+    compatibleWith: "Works with any UPI app",
+    orEnterUpi: "OR PAY USING UPI ID",
     upiIdLabel: "UPI ID",
     upiPlaceholder: "yourname@upi",
     verifyAndPay: "Verify & Pay",
@@ -71,6 +79,12 @@ const COPY = {
     upi: "यूपीआई",
     card: "कार्ड",
     netbanking: "नेटबैंकिंग",
+    scanToPay: "स्कैन करके भुगतान करें",
+    qrExpiresIn: "क्यूआर कोड की समयसीमा समाप्त होगी",
+    qrExpired: "क्यूआर कोड समाप्त हो गया",
+    refreshQr: "क्यूआर रीफ्रेश करें",
+    compatibleWith: "किसी भी यूपीआई ऐप के साथ काम करता है",
+    orEnterUpi: "या यूपीआई आईडी से भुगतान करें",
     upiIdLabel: "यूपीआई आईडी",
     upiPlaceholder: "yourname@upi",
     verifyAndPay: "सत्यापित करें और भुगतान करें",
@@ -139,6 +153,29 @@ function generatePaymentId() {
   return `txn_${id}`;
 }
 
+const QR_EXPIRY_SECONDS = 300; // 5:00, matches most real UPI checkout QR timers
+
+// Builds a real-shaped (but entirely fake) UPI deep link, the same
+// "upi://pay?..." format used by GPay/PhonePe/BHIM intents, so the
+// rendered QR looks and is structured like a genuine one. The payee VPA
+// is fictional — this is never meant to be scanned against a real wallet.
+function buildUpiUri({ total, purpose }) {
+  const params = new URLSearchParams({
+    pa: "demo@parivahanpay",
+    pn: "ParivahanSewaDemo",
+    am: String(total),
+    cu: "INR",
+    tn: purpose || "Payment",
+  });
+  return `upi://pay?${params.toString()}`;
+}
+
+function formatCountdown(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
 /* =========================================================
    MOCK CHECKOUT MODAL
 ========================================================= */
@@ -185,8 +222,10 @@ export default function MockCheckout({
   const [cardExpiry, setCardExpiry] = useState("");
   const [cardCvv, setCardCvv] = useState("");
   const [bank, setBank] = useState("");
+  const [qrSecondsLeft, setQrSecondsLeft] = useState(QR_EXPIRY_SECONDS);
 
   const total = amount + feeAmount;
+  const upiUri = buildUpiUri({ total, purpose });
 
   // Reset internal state each time the modal is (re)opened for a new payment.
   useEffect(() => {
@@ -201,7 +240,22 @@ export default function MockCheckout({
     setCardExpiry("");
     setCardCvv("");
     setBank("");
+    setQrSecondsLeft(QR_EXPIRY_SECONDS);
   }, [open]);
+
+  // Cosmetic QR expiry countdown — matches the "scan before it expires" UX
+  // real UPI checkouts use. Ticks only while the payment form is showing.
+  useEffect(() => {
+    if (!open || stage !== "form") return undefined;
+    const interval = setInterval(() => {
+      setQrSecondsLeft((seconds) => (seconds > 0 ? seconds - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [open, stage]);
+
+  function refreshQr() {
+    setQrSecondsLeft(QR_EXPIRY_SECONDS);
+  }
 
   useEffect(() => {
     if (!open) return undefined;
@@ -436,21 +490,77 @@ export default function MockCheckout({
               </div>
 
               {method === "upi" && (
-                <form onSubmit={handleUpiSubmit} className="mt-6 grid gap-4">
-                  <label className="grid gap-1.5 text-sm font-medium text-navy-950">
-                    {copy.upiIdLabel}
-                    <input
-                      className="form-input"
-                      placeholder={copy.upiPlaceholder}
-                      value={upiId}
-                      onChange={(event) => setUpiId(event.target.value)}
-                    />
-                  </label>
-                  <p className="text-xs text-slate-500">{copy.demoUpiHint}</p>
-                  <button type="submit" className="button-primary focus-ring">
-                    {copy.verifyAndPay} · {formatRupees(total)}
-                  </button>
-                </form>
+                <div className="mt-6">
+                  <div className="flex flex-col items-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-5 text-center">
+                    <p className="text-sm font-semibold text-navy-950">
+                      {copy.scanToPay}
+                    </p>
+
+                    <div className="relative mt-4 inline-flex rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+                      <QRCodeSVG
+                        value={upiUri}
+                        size={168}
+                        bgColor="#ffffff"
+                        fgColor="#0b1f3a"
+                        level="M"
+                      />
+
+                      {qrSecondsLeft === 0 && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-white/90 backdrop-blur-[1px]">
+                          <p className="text-xs font-semibold text-slate-600">
+                            {copy.qrExpired}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={refreshQr}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-navy-950 px-3 py-1.5 text-xs font-semibold text-white focus-ring"
+                          >
+                            <RefreshCw size={13} /> {copy.refreshQr}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="mt-3 text-xs text-slate-500">
+                      {qrSecondsLeft > 0 ? (
+                        <>
+                          {copy.qrExpiresIn}{" "}
+                          <span className="font-mono font-semibold text-navy-800">
+                            {formatCountdown(qrSecondsLeft)}
+                          </span>
+                        </>
+                      ) : (
+                        copy.qrExpired
+                      )}
+                    </p>
+
+                    <p className="mt-1 text-[0.7rem] text-slate-400">
+                      {copy.compatibleWith}
+                    </p>
+                  </div>
+
+                  <div className="my-5 flex items-center gap-3 text-[0.65rem] font-bold uppercase tracking-wide text-slate-400">
+                    <span className="h-px flex-1 bg-slate-200" />
+                    {copy.orEnterUpi}
+                    <span className="h-px flex-1 bg-slate-200" />
+                  </div>
+
+                  <form onSubmit={handleUpiSubmit} className="grid gap-4">
+                    <label className="grid gap-1.5 text-sm font-medium text-navy-950">
+                      {copy.upiIdLabel}
+                      <input
+                        className="form-input"
+                        placeholder={copy.upiPlaceholder}
+                        value={upiId}
+                        onChange={(event) => setUpiId(event.target.value)}
+                      />
+                    </label>
+                    <p className="text-xs text-slate-500">{copy.demoUpiHint}</p>
+                    <button type="submit" className="button-primary focus-ring">
+                      {copy.verifyAndPay} · {formatRupees(total)}
+                    </button>
+                  </form>
+                </div>
               )}
 
               {method === "card" && (

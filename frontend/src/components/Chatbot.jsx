@@ -120,14 +120,24 @@ export default function Chatbot() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? copy.close : copy.open}
-        className="chatbot-fab focus-ring"
+        className="chatbot-fab-triangle focus-ring"
       >
-        <span className="chatbot-fab-housing" aria-hidden="true">
-          <span className="chatbot-light chatbot-light-red" />
-          <span className="chatbot-light chatbot-light-yellow" />
-          <span className="chatbot-light chatbot-light-green" />
-        </span>
-        <span className="chatbot-fab-label">{copy.fabLabel}</span>
+        <svg
+          className="chatbot-fab-triangle-svg"
+          viewBox="0 0 100 92"
+          aria-hidden="true"
+        >
+          <path
+            d="M50 6 L92 84 L8 84 Z"
+            fill="#FFCC00"
+            stroke="#E11D2E"
+            strokeWidth="9"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="chatbot-fab-triangle-shine" aria-hidden="true" />
+        <span className="chatbot-fab-triangle-label">{copy.fabLabel}</span>
       </button>
 
       {open && (

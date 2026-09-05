@@ -386,8 +386,9 @@ export default function IndiaMapStateSearch({
         }
         .imss-search--open,
         .imss-search:focus-within {
-          border-color: #2563eb;
-          box-shadow: 0 14px 34px -10px rgba(37, 99, 235, 0.4);
+          border-color: #164a86;
+          box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.55),
+            0 14px 34px -10px rgba(11, 31, 58, 0.35);
         }
         .imss-search-icon {
           font-size: 1.1rem;

@@ -601,7 +601,7 @@ function VehicleRelatedServices({ lang }) {
                   {service.description}
                 </p>
 
-                <span className="mt-auto pt-5 text-sm font-semibold text-blue-700">
+                <span className="online-service-open-link mt-auto pt-5 text-sm font-semibold text-blue-700">
                   {copy.openService}{" "}
                   <span aria-hidden="true">
                     →
