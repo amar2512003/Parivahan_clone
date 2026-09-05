@@ -107,7 +107,7 @@ function ServiceCard({ title, desc, to, accent }) {
   return (
     <Link
       to={to}
-      className="block bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition focus-ring"
+      className="quick-service-card block bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition focus-ring"
     >
       <div className={`h-1.5 w-10 rounded-full ${accent} mb-4`} />
 
